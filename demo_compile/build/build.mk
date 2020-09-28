@@ -19,7 +19,7 @@ win:
 	qmake -o ${BUILDFILE}Makefile ${PROFILE} "CONFIG+=release"
 	cd ${BUILDFILE} && make
 	rm ${RELEASEFILE} -rf && mkdir ${RELEASEFILE}
-	cp ${BUILDFILE}${EXEFILE}.exe ${RELEASEFILE}
+	cp ${BUILDFILE}release/${EXEFILE}.exe ${RELEASEFILE}
 	windeployqt ${BUILDFILE}${EXEFILE}.exe
 	rm  ${BUILDFILE} -rf
 
