@@ -20,7 +20,7 @@ win:
 	cd ${BUILDFILE} && make
 	rm ${RELEASEFILE} -rf && mkdir ${RELEASEFILE}
 	cp ${BUILDFILE}release/${EXEFILE}.exe ${RELEASEFILE}
-	windeployqt ${BUILDFILE}release/${EXEFILE}.exe
+	windeployqt ${RELEASEFILE}${EXEFILE}.exe
 	rm  ${BUILDFILE} -rf
 
 	#cp /mingw64/bin/libdouble-conversion.dll build/UVS_CDKey_Generator1.0/
