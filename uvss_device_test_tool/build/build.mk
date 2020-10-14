@@ -7,7 +7,7 @@ TOP_ROOT=$(shell cd ../ && pwd)
 
 centos:
 	rm -rf ${BUILDFILE}
-	cd $(TOP_ROOT)/src/restclient-cpp/ && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && sudo make install
+	cd $(TOP_ROOT)/src/restclient-cpp/ && chmod +x autogen.sh && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && sudo make install
 	qmake -o ${BUILDFILE}Makefile ${PROFILE} "CONFIG+=release"
 	cd ${BUILDFILE} && make
 	rm ${RELEASEFILE} -rf && mkdir ${RELEASEFILE}
@@ -18,7 +18,7 @@ centos:
 
 win:
 	rm -rf ${BUILDFILE}
-	cd $(TOP_ROOT)/src/restclient-cpp/ && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && sudo make install
+	cd $(TOP_ROOT)/src/restclient-cpp/ && chmod +x autogen.sh && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && sudo make install
 	qmake -o ${BUILDFILE}Makefile ${PROFILE} "CONFIG+=release"
 	cd ${BUILDFILE} && make
 	rm ${RELEASEFILE} -rf && mkdir ${RELEASEFILE}
