@@ -1,0 +1,17 @@
+# 类型 0：lite  1：pro
+product = 0
+
+# 相机还可以使用的时间，每过一天减 1。
+remain_days = 60
+
+# 延迟的次数，每延迟一次就 +1
+# 最多延迟 4 次。
+delay_times = 0
+
+# 最后操作 remain_days 的时间
+# 获取当前时间，如果比 last_count_time 大24小时，则将 remain_days - 1
+last_count_time = 1234567890
+
+# 地区：China | Global
+region = "China"
+
