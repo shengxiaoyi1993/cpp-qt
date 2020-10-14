@@ -20,7 +20,7 @@
 #include<QPixmap>
 #include<QImage>
 #include<QDir>
-#include"httpconnect.h"
+// #include"httpconnect.h"
 
 class OneConnection: public QObject {
     Q_OBJECT

@@ -37,7 +37,6 @@ SOURCES += \
         ../src/uvsstesttool.cpp \
         ../src/uvss_api.cpp \
     ../src/configrelate.cpp \
-    ../src/httpconnect.cpp
 
 
 HEADERS += \
@@ -52,7 +51,6 @@ HEADERS += \
         ../src/uvss_api.h \
         ../src/uvsstesttool.h \
     ../src/configrelate.h \
-    ../src/httpconnect.h
 
 
 
@@ -63,7 +61,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 INCLUDEPATH += $$PWD/../src/restclient-cpp/lib/include
 
-LIBS += -L$$PWD/../src/restclient-cpp/lib/lib -lrestclient-cpp
+LIBS += -L$$PWD/../src/restclient-cpp/lib/lib -lrestclient-cpp -lcurl
 QMAKE_RPATHDIR += $$PWD/../src/restclient-cpp/lib/lib
 
 ### 加载当前目录下的 .so 库文件
