@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../../resources/logo.png</file>
+        <file>../resources/resources</file>
+        <file>../resources/to-air.jpg</file>
+        <file>../resources/to-ground-detail1.jpg</file>
+        <file>../resources/to-ground.jpg</file>
+        <file>../resources/down.png</file>
+        <file>../resources/left.png</file>
+        <file>../resources/right.png</file>
+        <file>../resources/up.png</file>
+        <file>../resources/area.jpg</file>
+    </qresource>
+</RCC>
