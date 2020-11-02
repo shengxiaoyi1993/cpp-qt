@@ -7,7 +7,7 @@
 #include "../view/togroudcamview.h"
 #include "../view/directcamview.h"
 #include "../view/electronicsituationmap.h"
-
+#include "../view/nvrreview.h"
 
 
 
@@ -34,6 +34,8 @@ private slots:
 
   void on_pushButton_4_clicked();
 
+  void on_pushButton_5_clicked();
+
 private:
   Ui::MainWindow *ui;
   LoginClient    *_loginview;
@@ -41,6 +43,7 @@ private:
   ToGroudCamView *_view_togroud;
   DirectCamView *_view_direct;
   ElectronicSituationMap * _view_esmap;
+  NvrReview       *_view_nvr;
 
 };
 

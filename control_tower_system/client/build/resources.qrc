@@ -10,5 +10,8 @@
         <file>../resources/right.png</file>
         <file>../resources/up.png</file>
         <file>../resources/area.jpg</file>
+        <file>../resources/green_light.png</file>
+        <file>../resources/red_light.png</file>
+        <file>../resources/yellow_light.png</file>
     </qresource>
 </RCC>

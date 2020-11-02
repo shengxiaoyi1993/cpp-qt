@@ -31,7 +31,8 @@ SOURCES += \
     ../src/view/toaircamview.cpp \
     ../src/view/togroudcamview.cpp \
     ../src/view/directcamview.cpp \
-    ../src/view/electronicsituationmap.cpp
+    ../src/view/electronicsituationmap.cpp \
+    ../src/view/nvrreview.cpp
 
 HEADERS += \
         ../../../src/main/mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     ../src/view/toaircamview.h \
     ../src/view/togroudcamview.h \
     ../src/view/directcamview.h \
-    ../src/view/electronicsituationmap.h
+    ../src/view/electronicsituationmap.h \
+    ../src/view/nvrreview.h
 
 FORMS += \
         ../../../src/view/mainwindow.ui \
@@ -47,7 +49,8 @@ FORMS += \
     ../src/view/toaircamview.ui \
     ../src/view/togroudcamview.ui \
     ../src/view/directcamview.ui \
-    ../src/view/electronicsituationmap.ui
+    ../src/view/electronicsituationmap.ui \
+    ../src/view/nvrreview.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
