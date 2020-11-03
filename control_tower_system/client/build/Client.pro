@@ -25,8 +25,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        ../../../src/main/main.cpp \
-        ../../../src/main/mainwindow.cpp \
+        ../src/main/main.cpp \
+        ../src/main/mainwindow.cpp \
     ../src/view/loginclient.cpp \
     ../src/view/toaircamview.cpp \
     ../src/view/togroudcamview.cpp \
@@ -35,7 +35,7 @@ SOURCES += \
     ../src/view/nvrreview.cpp
 
 HEADERS += \
-        ../../../src/main/mainwindow.h \
+        ../src/main/mainwindow.h \
     ../src/view/loginclient.h \
     ../src/view/toaircamview.h \
     ../src/view/togroudcamview.h \
@@ -44,7 +44,7 @@ HEADERS += \
     ../src/view/nvrreview.h
 
 FORMS += \
-        ../../../src/view/mainwindow.ui \
+        ../src/view/mainwindow.ui \
     ../src/view/loginclient.ui \
     ../src/view/toaircamview.ui \
     ../src/view/togroudcamview.ui \

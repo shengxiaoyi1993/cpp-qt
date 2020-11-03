@@ -25,9 +25,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        ../../../src/main/main.cpp \
-        ../../../src/main/mainwindow.cpp \
-        ../../../src/view/userconfig.cpp \
+        ../../src/main/main.cpp \
+        ../../src/main/mainwindow.cpp \
+        ../../src/view/userconfig.cpp \
     ../../src/view/loginserver.cpp \
     ../../src/view/useritem.cpp \
     ../../src/view/devconfig.cpp \
@@ -35,8 +35,8 @@ SOURCES += \
     ../../src/view/nvrconfig.cpp
 
 HEADERS += \
-        ../../../src/main/mainwindow.h \
-        ../../../src/view/userconfig.h \
+        ../../src/main/mainwindow.h \
+        ../../src/view/userconfig.h \
     ../../src/view/loginserver.h \
     ../../src/view/useritem.h \
     ../../src/view/devconfig.h \
@@ -44,8 +44,8 @@ HEADERS += \
     ../../src/view/nvrconfig.h
 
 FORMS += \
-        ../../../src/view/mainwindow.ui \
-        ../../../src/view/userconfig.ui \
+        ../../src/view/mainwindow.ui \
+        ../../src/view/userconfig.ui \
     ../../src/view/loginserver.ui \
     ../../src/view/useritem.ui \
     ../../src/view/devconfig.ui \
