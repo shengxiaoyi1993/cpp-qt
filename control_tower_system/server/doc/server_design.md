@@ -13,11 +13,17 @@
 
 ```cpp
 enum UserType{UserType_admin,UserType_ordinary};
+enum CamCtlFlag{CamCtlFlag_read,CamCtlFlag_modify};
+
+struct CamCtl{
+  string _camname;
+  CamCtlFlag _flag;
+}CamCtl;
 struct User{
   string _username;
   string _password;
   UserType _type;
-  CameraArray _cameras;
+  std::vector<CamCtl> _cams;
 }User;
 std::vector<User> userlist;
 ```
@@ -45,18 +51,20 @@ struct Camera{
   string _ip;
   string _username;
   string _password;
+  string _tty;
+
 }Camera;
 
-struct DirectCamera{
-  string _camname;
-  string _tty;
-  string _ip;
-}Camera;
+// struct DirectCamera{
+//   string _camname;
+//   string _tty;
+//   string _ip;
+// }Camera;
 
 struct CameraArray{
   std::vector<Camera> air_camera_list;
   std::vector<Camera> ground_camera_list;
-  std::vector<DirectCamera> direct_camera_list;
+  std::vector<Camera> direct_camera_list;
 }CameraArray;
 
 ```

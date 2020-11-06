@@ -14,7 +14,9 @@
 - [ ] 交付确认
 - [ ] 确认修改
 ## 4 详细设计
+- [ ] API设计
 ### 4.1 server-service
+- [ ] server-service 设计
 ### 4.2 server
 ### 4.3 client
 
