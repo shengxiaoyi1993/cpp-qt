@@ -77,7 +77,7 @@ INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
 
 
 win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/dll/ -llibcom.dll
-unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/ -lcom
+unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/so/ -lcom
 
 INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
 DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include

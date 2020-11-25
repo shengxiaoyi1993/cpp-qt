@@ -75,12 +75,7 @@ RESOURCES += \
 INCLUDEPATH += $$PWD/../../../common_component/
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
 
-unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/ -lcom
-
-INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
-DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
-
-
+unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/so/ -lcom
 win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/dll/ -llibcom.dll
 
 INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include

@@ -54,11 +54,14 @@ INCLUDEPATH += $$PWD/../../../common_component/
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
 
 
-unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_server/lib/ -lcom_server
+
+
+unix:!macx: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_server/lib/so/ -lcom_server
 win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_server/lib/dll/ -llibcom_server.dll
 
 INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_server/include
 DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_server/lib
+
 
 
 
@@ -72,3 +75,6 @@ win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/li
 
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
 DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
+
+
+
