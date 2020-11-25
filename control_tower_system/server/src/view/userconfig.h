@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include "useritem.h"
-#include "../../../server_service/src/ds_def/tcs_ds_def.h"
+#include "ds_def/tcs_ds_def.h"
 
 namespace Ui {
 class UserConfig;

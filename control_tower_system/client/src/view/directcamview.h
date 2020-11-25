@@ -7,7 +7,8 @@
 #include <QPoint>
 #include <vector>
 #include <string>
-#include "../../../server_service/src/ds_def/tcs_ds_def.h"
+#include<QMouseEvent>
+#include "ds_def/tcs_ds_def.h"
 
 /// 直显相机操作界面
 /// 接口
@@ -30,21 +31,29 @@ public:
   explicit DirectCamView(QWidget *parent = nullptr);
   ~DirectCamView();
   void updateDirctCamList(const vector<ns_tcs_ds_def::CamDev>  &l_cam);
+  void setLeftTop(const QPoint& v_point);
 
 private:
   Ui::DirectCamView *ui;
   vector<ns_tcs_ds_def::CamDev> _l_cam_a;
-  ns_tcs_ds_def::CamDev _cam;
+//  ns_tcs_ds_def::CamDev _cam;
   vector<QPushButton*>  _l_pushbutton_a;
   vector<QPushButton*>  _l_pushbutton_b;
   vector<QPushButton*>  _l_pushbutton_move;
   vector<QRadioButton*>  _l_radiobutton_point;
+  uint _index_cam_a;
+  QPoint _point_cursor;
   void setAllDisable();
   int getPoint(QPoint &v_point);
 
   vector<QPoint> _l_point;
   vector<QPoint> _l_pad_move;
+  QPoint _point_lefttop;
   int getMvPad(QPoint &v_point);
+  void activateCertainButtonA(uint v_seq);
+  void mousePressEvent(QMouseEvent *event);
+
+
 
 
 

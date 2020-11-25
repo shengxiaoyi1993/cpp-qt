@@ -3,7 +3,6 @@
 #include <QCryptographicHash>
 #include "../datamanage/datamanage.h"
 #include "../controler/controler.h"
-#include "../com/comserver.h"
 
 
 

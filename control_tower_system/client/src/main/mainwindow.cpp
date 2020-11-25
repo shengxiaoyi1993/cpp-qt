@@ -7,11 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
-  _view_toair=new ToAirCamView();
-  _view_togroud=new ToGroudCamView();
-  _view_direct=new DirectCamView();
-  _view_esmap=new ElectronicSituationMap();
-  _view_nvr=new NvrReview();
+  _view_toair=new ToAirCamView(this);
+  _view_togroud=new ToGroudCamView(this);
+  _view_direct=new DirectCamView(this);
+  _view_esmap=new ElectronicSituationMap(this);
+  _view_nvr=new NvrReview(this);
 
 
   ui->stackedWidget->addWidget(_view_toair);
@@ -21,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->stackedWidget->addWidget(_view_nvr);
 
 }
+
+void MainWindow::paintEvent(QPaintEvent *)  {
+    _view_direct->setLeftTop(_view_direct->geometry().topLeft()+QPoint(0,ui->menuBar->height()));
+}
+
 
 MainWindow::~MainWindow()
 {

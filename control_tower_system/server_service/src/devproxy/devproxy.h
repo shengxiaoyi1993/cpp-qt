@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include "basecam.h"
-#include "../ds_def/tcs_ds_def.h"
+#include "../../../common_component/ds_def/tcs_ds_def.h"
 
 /// 该类为设备的管理类
 /// 一经初始化就开试运行，监控设备的运行情况

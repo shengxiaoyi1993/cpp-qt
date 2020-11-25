@@ -4,7 +4,7 @@
 #include <QObject>
 #include <string>
 #include <iostream>
-#include "../ds_def/tcs_ds_def.h"
+#include "../../../common_component/ds_def/tcs_ds_def.h"
 
 
 using namespace std;

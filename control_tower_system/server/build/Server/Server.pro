@@ -25,6 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    ../../../common_component/api_client/apiclient.cpp \
+    ../../../common_component/ds_def/tcs_ds_def.cpp \
+    ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.cpp \
+    ../../../common_lib/third_party_lib/cjsonobject/cJSON.cpp \
         ../../src/main/main.cpp \
         ../../src/main/mainwindow.cpp \
         ../../src/view/userconfig.cpp \
@@ -33,13 +37,15 @@ SOURCES += \
     ../../src/view/devconfig.cpp \
     ../../src/view/devitem.cpp \
     ../../src/view/nvrconfig.cpp \
-    ../../../common_lib/sskj_lib/api_client/apiclient.cpp \
-    ../../../server_service/src/ds_def/tcs_ds_def.cpp \
-    ../../../server_service/lib/cjsonobject/cJSON.cpp \
-    ../../../server_service/lib/cjsonobject/CJsonObject.cpp \
     ../../src/controller/controller.cpp \
 
+
+
 HEADERS += \
+    ../../../common_component/api_client/apiclient.h \
+    ../../../common_component/ds_def/tcs_ds_def.h \
+    ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp \
+    ../../../common_lib/third_party_lib/cjsonobject/cJSON.h \
         ../../src/main/mainwindow.h \
         ../../src/view/userconfig.h \
     ../../src/view/loginserver.h \
@@ -47,10 +53,6 @@ HEADERS += \
     ../../src/view/devconfig.h \
     ../../src/view/devitem.h \
     ../../src/view/nvrconfig.h \
-    ../../../common_lib/sskj_lib/api_client/apiclient.h \
-    ../../../server_service/src/ds_def/tcs_ds_def.h \
-    ../../../server_service/lib/cjsonobject/cJSON.h \
-    ../../../server_service/lib/cjsonobject/CJsonObject.hpp \
     ../../src/controller/controller.h \
 
 FORMS += \
@@ -70,25 +72,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 RESOURCES += \
     resources.qrc
 
+INCLUDEPATH += $$PWD/../../../common_component/
+INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
+
+
+win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/dll/ -llibcom.dll
 unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/ -lcom
 
 INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
 DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
 
 
-
-unix: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
-
-INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
-DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib
-
-
-win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/dll/ -lrestclient-cpp
+unix:!macx|win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
 
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
 DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
-
-win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_client/lib/dll/ -llibcom.dll
-
-INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include
-DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_client/include

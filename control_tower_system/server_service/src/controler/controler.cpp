@@ -1,5 +1,4 @@
 #include "controler.h"
-#include "controler_top.h"
 #include <iostream>
 #include <string>
 #include <QByteArray>

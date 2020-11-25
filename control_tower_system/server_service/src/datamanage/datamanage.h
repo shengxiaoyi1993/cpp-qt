@@ -6,8 +6,8 @@
 #include <cstring>
 #include <exception>
 #include <utility>
-#include "../../lib/cjsonobject/CJsonObject.hpp"
-#include "../ds_def/tcs_ds_def.h"
+#include "../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp"
+#include "../../../common_component/ds_def/tcs_ds_def.h"
 
 
 using namespace std;

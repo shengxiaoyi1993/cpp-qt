@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPaintEvent>
 #include "../view/loginclient.h"
 #include "../view/toaircamview.h"
 #include "../view/togroudcamview.h"
@@ -53,6 +54,8 @@ private:
   DirectCamView *_view_direct;
   ElectronicSituationMap * _view_esmap;
   NvrReview       *_view_nvr;
+  void paintEvent(QPaintEvent *)  ;
+
 
 };
 

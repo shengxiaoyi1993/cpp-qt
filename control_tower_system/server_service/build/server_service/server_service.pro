@@ -15,15 +15,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../../../common_component/api_server/apiserver.cpp \
+    ../../../common_component/comcpp_server/comserver.cpp \
+    ../../../common_component/ds_def/tcs_ds_def.cpp \
+    ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.cpp \
+    ../../../common_lib/third_party_lib/cjsonobject/cJSON.cpp \
         ../../src/main/main.cpp \
     ../../src/datamanage/datamanage.cpp \
     ../../src/devproxy/devproxy.cpp \
-    ../../src/com/comserver.cpp \
     ../../src/schedule/schedule.cpp \
-    ../../lib/cjsonobject/cJSON.cpp \
-    ../../lib/cjsonobject/CJsonObject.cpp \
-    ../../src/com/apiserver.cpp \
-    ../../src/ds_def/tcs_ds_def.cpp \
     ../../src/devproxy/basecam.cpp \
     ../../src/controler/controler.cpp \
     ../../src/devproxy/nvrdev.cpp
@@ -36,20 +36,22 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ../../../common_component/api_server/apiserver.h \
+    ../../../common_component/comcpp_server/comserver.h \
+    ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp \
+    ../../../common_lib/third_party_lib/cjsonobject/cJSON.h \
+    ../../../common_component/ds_def/tcs_ds_def.h \
     ../../src/datamanage/datamanage.h \
     ../../src/devproxy/devproxy.h \
-    ../../src/com/comserver.h \
     ../../src/schedule/schedule.h \
-    ../../lib/cjsonobject/cJSON.h \
-    ../../lib/cjsonobject/CJsonObject.hpp \
-    ../../src/com/apiserver.h \
-    ../../src/ds_def/tcs_ds_def.h \
     ../../src/devproxy/basecam.h \
     ../../src/controler/controler.h \
-    ../../src/controler/controler_top.h \
     ../../src/devproxy/nvrdev.h
 
 
+
+INCLUDEPATH += $$PWD/../../../common_component/
+INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
 
 
 unix: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_server/lib/ -lcom_server
@@ -57,8 +59,6 @@ win32: LIBS += -L$$PWD/../../../common_lib/sskj_lib/com_server/lib/dll/ -llibcom
 
 INCLUDEPATH += $$PWD/../../../common_lib/sskj_lib/com_server/include
 DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_server/lib
-
-
 
 
 

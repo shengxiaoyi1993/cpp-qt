@@ -5,10 +5,11 @@
 #include <iostream>
 #include <string>
 #include <QTimer>
-#include "../com/apiserver.h"
 #include "../datamanage/datamanage.h"
 #include "../devproxy/devproxy.h"
-#include "../ds_def/tcs_ds_def.h"
+#include "../../../common_component/ds_def/tcs_ds_def.h"
+#include "../../../common_component/api_server/apiserver.h"
+//#include "../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp"
 
 /// 流程：实例化,初始化，开试运行
 

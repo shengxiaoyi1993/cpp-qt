@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "../../../common_lib/sskj_lib/api_client/apiclient.h"
+#include "api_client/apiclient.h"
 #include "../controller/controller.h"
 
 void testAPI();

@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QTreeWidgetItem>
 #include "devitem.h"
-#include "../../../server_service/src/ds_def/tcs_ds_def.h"
+#include "ds_def/tcs_ds_def.h"
 
 
 /// 用于显示设备和配置设备，将配置好的信息组合传递给controler

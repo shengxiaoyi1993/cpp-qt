@@ -4,7 +4,7 @@
 #include <QObject>
 #include "../view/loginclient.h"
 #include "../main/mainwindow.h"
-#include "../../common_lib/sskj_lib/api_client/apiclient.h"
+#include "api_client/apiclient.h"
 
 class Controller : public QObject
 {

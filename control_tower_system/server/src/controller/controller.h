@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QTimer>
 #include "../main/mainwindow.h"
-#include "../../../common_lib/sskj_lib/api_client/apiclient.h"
+#include "api_client/apiclient.h"
 
 /// 对于所有信息都需要同步的情况
 ///   1.增删设备
