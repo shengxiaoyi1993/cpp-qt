@@ -20,7 +20,7 @@ centos:
 	-linuxdeployqt-6-x86_64.AppImage ${RELEASEFILE}${EXEFILE} -appimage
 	rm  ${BUILDFILE} -rf
 	cp ${TOP_ROOT}/resources ${RELEASEFILE} -rf
-	tar -cvf  ${PROJ_NAME}.zip ${RELEASEFILE}
+	tar -zcvf  ${PROJ_NAME}.tar.gz  -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
 	rm  ${RELEASEFILE} -rf
 
 
@@ -37,7 +37,7 @@ win:
 	windeployqt ${RELEASEFILE}${EXEFILE}.exe
 	rm  ${BUILDFILE} -rf
 	cp ${TOP_ROOT}/resources ${RELEASEFILE} -rf
-	tar -cvf  ${PROJ_NAME}.zip -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
+	tar   ${PROJ_NAME}.zip -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
 	rm  ${RELEASEFILE} -rf
 
 
