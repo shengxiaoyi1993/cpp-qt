@@ -34,6 +34,9 @@ SOURCES += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+RC_FILE += server_service.rc
+#RC_ICONS += client.ico
+rc_file += server_service.gif
 
 HEADERS += \
     ../../../common_component/api_server/apiserver.h \
@@ -66,12 +69,9 @@ DEPENDPATH += $$PWD/../../../common_lib/sskj_lib/com_server/lib
 
 
 unix: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
-
-INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
-DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib
+win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
 
 
-win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/lib/dll/ -lrestclient-cpp
 
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
 DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include

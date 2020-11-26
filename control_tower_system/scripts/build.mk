@@ -1,7 +1,8 @@
 TOP_ROOT=$(shell cd ../ && pwd)
 PROFILE=${TOP_ROOT}/${PROJ_NAME}/build/${PROJ_NAME}/${PROJ_NAME}.pro
 BUILDFILE=${TOP_ROOT}/${PROJ_NAME}/build/${PROJ_NAME}/build/
-RELEASEFILE=${TOP_ROOT}/${PROJ_NAME}/build/${PROJ_NAME}/RELEASE_${PROJ_NAME}/
+RELEASEFILE_NAME=RELEASE_${PROJ_NAME}
+RELEASEFILE=${TOP_ROOT}/${PROJ_NAME}/build/${PROJ_NAME}/${RELEASEFILE_NAME}/
 EXEFILE=${PROJ_NAME}
 
 
@@ -25,15 +26,18 @@ centos:
 
 win:
 	rm -rf ${BUILDFILE}
-	cd $(TOP_ROOT)/src/restclient-cpp/ && chmod +x autogen.sh && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && make install
+	cd $(TOP_ROOT)/common_lib/third_party_lib/restclient-cpp/ && chmod +x autogen.sh && ./autogen.sh && ./configure --prefix=`pwd`/lib/ && make && make install
 	qmake -o ${BUILDFILE}Makefile ${PROFILE} "CONFIG+=release"
 	cd ${BUILDFILE} && make
 	rm ${RELEASEFILE} -rf && mkdir ${RELEASEFILE}
 	cp ${BUILDFILE}release/${EXEFILE}.exe ${RELEASEFILE}
+	cp ${TOP_ROOT}/common_lib/sskj_lib/com_client/lib/dll/* ${RELEASEFILE}
+	cp ${TOP_ROOT}/common_lib/sskj_lib/com_server/lib/dll/* ${RELEASEFILE}
+	cp ${TOP_ROOT}/common_lib/third_party_lib/restclient-cpp/lib/lib/* ${RELEASEFILE}
 	windeployqt ${RELEASEFILE}${EXEFILE}.exe
 	rm  ${BUILDFILE} -rf
 	cp ${TOP_ROOT}/resources ${RELEASEFILE} -rf
-	zip -q  ${PROJ_NAME}.zip ${RELEASEFILE}
+	tar -cvf  ${PROJ_NAME}.zip -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
 	rm  ${RELEASEFILE} -rf
 
 
