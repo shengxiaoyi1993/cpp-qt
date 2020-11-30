@@ -405,7 +405,7 @@ void controller::slot_on_timer_1s(){
 void controller::updateUserConfig(){
   vector<ns_tcs_ds_def::User> v_users;
   ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_alluser=_apiclient->req_queryALLUSER(v_users);
-  cout<<"req_queryALLUSER:"<<code_alluser<<endl;
+//  cout<<"req_queryALLUSER:"<<code_alluser<<endl;
   if(code_alluser != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
     throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
   }
@@ -414,7 +414,7 @@ void controller::updateUserConfig(){
 
 
 void controller::slot2UserConfig_rmOneUser(ns_tcs_ds_def::User v_user){
-  cout<<__func__<<"v_user._username:"<<v_user._username<<endl;
+//  cout<<__func__<<"v_user._username:"<<v_user._username<<endl;
 
   ns_tcs_ds_def::ENUM_HTTP_ERRCODE flag= _apiclient->req_DELUSER(v_user._username);
   if(flag == ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
@@ -489,7 +489,7 @@ void controller::updataDevConfig(){
 
   vector<string> list_port;
   ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_port=_apiclient->req_querySerialPort(list_port);
-  cout<<"req_querySerialPort:"<<code_port<<endl;
+//  cout<<"req_querySerialPort:"<<code_port<<endl;
   if(code_port != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
     throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
   }

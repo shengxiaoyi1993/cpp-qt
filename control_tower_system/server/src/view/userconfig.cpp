@@ -46,7 +46,6 @@ void UserConfig::on_pushButton_adduser_clicked()
     else{
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)
                               +": Error(no admin)!");
-
     }
 
 }
@@ -107,7 +106,9 @@ void UserConfig::updateUserList(const vector<ns_tcs_ds_def::User>& v_users){
 
 
 void UserConfig::on_useritem_instance_rmOneUser(ns_tcs_ds_def::User v_user){
+  if (v_user._username!="admin") {
     emit sgl_rmOneUser(v_user);
+  }
 }
 
 void UserConfig::on_useritem_instance_addOneUser(ns_tcs_ds_def::User v_user){
@@ -137,6 +138,7 @@ void UserConfig::on_pushButton_rmall_clicked()
     vector<ns_tcs_ds_def::User>tmplist= _l_users;
     for(int i=0;i<tmplist.size();i++){
         if(tmplist[i]._username != "admin"){
+          cout<<"000000000000000000000:"<<tmplist[i]._username<<endl;
             emit sgl_rmOneUser(tmplist[i]);
         }
     }

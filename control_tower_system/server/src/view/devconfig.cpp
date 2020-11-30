@@ -76,15 +76,15 @@ void DevConfig::on_pushButton_removealldev_clicked()
 {
 
     ns_tcs_ds_def::CameraArray tmparray=_camarray;
-    for(int i=0;i<_camarray.ground_camera_list.size();i++){
+    for(int i=0;i<tmparray.ground_camera_list.size();i++){
         emit sgl_rmCam(tmparray.ground_camera_list[i]);
     }
 
-    for(int i=0;i<_camarray.air_camera_list.size();i++){
+    for(int i=0;i<tmparray.air_camera_list.size();i++){
         emit sgl_rmCam(tmparray.air_camera_list[i]);
     }
 
-    for(int i=0;i<_camarray.direct_camera_list.size();i++){
+    for(int i=0;i<tmparray.direct_camera_list.size();i++){
         emit sgl_rmCam(tmparray.direct_camera_list[i]);
     }
 

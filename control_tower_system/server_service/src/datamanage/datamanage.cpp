@@ -65,11 +65,16 @@ bool DataColl::checkRepeatUser(const User& v_user,int v_rpl){
         _users.erase(it);
       }
       flag_ret= true;
+      break;
+
     }
   }
 
+
   saveToFile();
 
+  cout<<__func__<<" succeed to saveToFile "<<endl;
+  cout.flush();
   return flag_ret;
 }
 
@@ -126,8 +131,13 @@ int DataColl::modifyUser(const User& v_user){
 }
 
 int DataColl::delUser(const User& v_user){
+  cout<<__func__<<" user:"<<v_user._username<<endl;
   if(checkRepeatUser(v_user,2) == true){
+    cout<<__func__<<" succeed to rm "<<v_user._username<<endl;
+
     saveToFile();
+    cout<<__func__<<" succeed to save "<<v_user._username<<endl;
+
     return 0;
   }
   else{
@@ -191,7 +201,7 @@ int DataColl::saveToFile() const{
   }
 
   else{
-    throw text_exception("Fail to save data!");
+    throw StringException("Fail to save data!");
   }
   return 0;
 

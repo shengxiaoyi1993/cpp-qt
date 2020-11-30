@@ -84,19 +84,19 @@ Controler::Controler(string v_config, QObject *parent) : QObject(parent),
             this,SLOT(slot_OnDevReconnect(string)));
     _devproxy->setCameraArray(_datacoll->CamArary());
 
-    cout<<"CamArary:"<<_datacoll->CamArary().jsonobj().ToFormattedString()<<endl;
-    cout<<"isListenHTTP:"<<_apiserver->isListenHTTP()<<endl;
+//    cout<<"CamArary:"<<_datacoll->CamArary().jsonobj().ToFormattedString()<<endl;
+//    cout<<"isListenHTTP:"<<_apiserver->isListenHTTP()<<endl;
     auto list_camstatus=_devproxy->getCamStatusList();
 
-    for(auto it=list_camstatus.begin();it<list_camstatus.end();it++){
-        cout<<""<<it->jsonobj().ToString()<<endl;
-    }
+//    for(auto it=list_camstatus.begin();it<list_camstatus.end();it++){
+//        cout<<""<<it->jsonobj().ToString()<<endl;
+//    }
     map<UserItem,bool> list_user= _apiserver->getUserStatus();
-    cout<<"list_user.size:"<<list_user.size()<<endl;
-    for (auto it = list_user.begin();it!=list_user.end();it++) {
-        cout<<"_username:"<<it->first._username<<endl;
-        cout<<"second:"<<it->second<<endl;
-    }
+//    cout<<"list_user.size:"<<list_user.size()<<endl;
+//    for (auto it = list_user.begin();it!=list_user.end();it++) {
+//        cout<<"_username:"<<it->first._username<<endl;
+//        cout<<"second:"<<it->second<<endl;
+//    }
 
 }
 
@@ -173,8 +173,8 @@ void Controler::updateUserMapInAPI(){
         string hash_tmp= QCryptographicHash::hash(QByteArray::fromStdString(it->_password), QCryptographicHash::Sha256)
                 .toHex().toStdString();
         list_useritem.insert(list_useritem.begin(),UserItem(it->_username,hash_tmp));
-        cout<<"hash_tmp:"<<hash_tmp<<endl;
-        cout<<"it->_username:"<<it->_username<<endl;
+//        cout<<"hash_tmp:"<<hash_tmp<<endl;
+//        cout<<"it->_username:"<<it->_username<<endl;
 
     }
     //  _apiserver->stopListenHttp();
@@ -245,13 +245,13 @@ void Controler::slot_qrySingleUser( long long v_fd,string v_usr,string v_data){
     /// 该用户或者更高级的用户可以访问该用户
     /// admin,assit 可被admin ,assit 类型的访问,可以访问任意类型的
     /// ordinary    可以访问自身
-    cout<<__func__<<endl;
+//    cout<<__func__<<endl;
 
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
     /// 现在用户信息列表中找到用户类型
     auto pos_user=find_if(list_user.begin(),list_user.end(),[=](ns_tcs_ds_def::User v_useritem){
-        cout<<"v_useritem._username:"<<v_useritem._username<<endl;
-        cout<<"v_usr:"<<v_usr<<endl;
+//        cout<<"v_useritem._username:"<<v_useritem._username<<endl;
+//        cout<<"v_usr:"<<v_usr<<endl;
 
         return (v_useritem._username==v_usr);
     });
@@ -259,13 +259,13 @@ void Controler::slot_qrySingleUser( long long v_fd,string v_usr,string v_data){
 
     if(pos_user!=list_user.end()){
         if((v_usr == v_data)||(pos_user->_type!=ns_tcs_ds_def::UserType_ordinary)){
-            cout<<__func__<<" judge0:"<<v_usr << v_data<<endl;
-            cout<<__func__<<" judge1:"<<(pos_user->_type!=ns_tcs_ds_def::UserType_ordinary)<<endl;
+//            cout<<__func__<<" judge0:"<<v_usr << v_data<<endl;
+//            cout<<__func__<<" judge1:"<<(pos_user->_type!=ns_tcs_ds_def::UserType_ordinary)<<endl;
 
 
             auto pos_target=find_if(list_user.begin(),list_user.end(),[=](ns_tcs_ds_def::User v_useritem){
-                cout<<"v_useritem._username:"<<v_useritem._username<<endl;
-                cout<<"v_usr:"<<v_usr<<endl;
+//                cout<<"v_useritem._username:"<<v_useritem._username<<endl;
+//                cout<<"v_usr:"<<v_usr<<endl;
                 return (v_useritem._username==v_data);
             });
             if(pos_target != list_user.end()){
@@ -274,7 +274,7 @@ void Controler::slot_qrySingleUser( long long v_fd,string v_usr,string v_data){
             }
         }
     }
-    cout<<__func__<<" 3"<<endl;
+//    cout<<__func__<<" 3"<<endl;
 
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     return ;
@@ -504,7 +504,7 @@ void Controler::slot_qrySerialPort( long long v_fd,string v_usr){
 
 /// 只有admin/assist才能添加设备
 void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v_data){
-    cout<<"slot_addDev:"<<v_data.jsonobj().ToString();
+//    cout<<"slot_addDev:"<<v_data.jsonobj().ToString();
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
 
     /// 现在用户信息列表中找到用户类型
@@ -516,9 +516,9 @@ void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
     if(pos_user!=list_user.end()){
         if(pos_user->_type==ns_tcs_ds_def::UserType_admin||pos_user->_type==ns_tcs_ds_def::UserType_assit){
             int flag=_datacoll->addCam(v_data);
-            cout<<"addcom:"<<v_data.jsonobj().ToString()<<endl;
+//            cout<<"addcom:"<<v_data.jsonobj().ToString()<<endl;
             if(flag==0){
-                cout<<"添加成功后，在devproxy实例化一个对象"<<endl;
+//                cout<<"添加成功后，在devproxy实例化一个对象"<<endl;
 
                 /// 添加成功后，在devproxy实例化一个对象
                 _devproxy->setCameraArray(_datacoll->CamArary());

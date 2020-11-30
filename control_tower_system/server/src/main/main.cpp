@@ -13,7 +13,13 @@ int main(int argc, char *argv[])
   int execcode=0;
   do {
     QApplication a(argc, argv);
-    controller control;
+    controller *control;
+    try {
+       control=new controller;
+
+    } catch (std::exception v_ex) {
+      cout<<"exception:"<<v_ex.what()<<endl;
+    }
     execcode=a.exec();
   } while (execcode == controller::REBOOT_CODE);
 

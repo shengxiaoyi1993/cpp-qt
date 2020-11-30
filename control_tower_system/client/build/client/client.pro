@@ -74,7 +74,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    ../resources.qrc
 
 INCLUDEPATH += $$PWD/../../../common_component/
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/
