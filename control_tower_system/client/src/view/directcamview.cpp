@@ -45,15 +45,34 @@ DirectCamView::DirectCamView(QWidget *parent) :
     };
 
     _l_radiobutton_point={
-        ui->radioButton_tl,
-        ui->radioButton_tm,
-        ui->radioButton_tr,
-        ui->radioButton_ml,
-        ui->radioButton_mm,
-        ui->radioButton_mr,
-        ui->radioButton_bl,
-        ui->radioButton_bm,
-        ui->radioButton_br
+        ui->radioButton_00,
+        ui->radioButton_01,
+        ui->radioButton_02,
+        ui->radioButton_03,
+        ui->radioButton_04,
+
+        ui->radioButton_10,
+        ui->radioButton_20,
+        ui->radioButton_30,
+        ui->radioButton_40,
+        ui->radioButton_50,
+        ui->radioButton_60,
+        ui->radioButton_70,
+
+        ui->radioButton_14,
+        ui->radioButton_24,
+        ui->radioButton_34,
+        ui->radioButton_44,
+        ui->radioButton_54,
+        ui->radioButton_64,
+        ui->radioButton_74,
+
+        ui->radioButton_80,
+        ui->radioButton_81,
+        ui->radioButton_82,
+        ui->radioButton_83,
+        ui->radioButton_84
+
     };
 
 
@@ -76,23 +95,41 @@ DirectCamView::DirectCamView(QWidget *parent) :
 
     _l_point={
         QPoint(0,0),
-        QPoint(10,0),
-        QPoint(20,0),
-        QPoint(0,10),
-        QPoint(10,10),
-        QPoint(20,10),
-        QPoint(0,20),
-        QPoint(10,20),
-        QPoint(20,20)
+        QPoint(0,1),
+        QPoint(0,2),
+        QPoint(0,3),
+        QPoint(0,4),
+
+        QPoint(1,0),
+        QPoint(2,0),
+        QPoint(3,0),
+        QPoint(4,0),
+        QPoint(5,0),
+        QPoint(6,0),
+        QPoint(7,0),
+
+        QPoint(1,4),
+        QPoint(2,4),
+        QPoint(3,4),
+        QPoint(4,4),
+        QPoint(5,4),
+        QPoint(6,4),
+        QPoint(7,4),
+
+        QPoint(8,0),
+        QPoint(8,1),
+        QPoint(8,2),
+        QPoint(8,3),
+        QPoint(8,4)
     };
 
     _l_pad_move={
+        QPoint(0,-1),
+        QPoint(-1,0),
         QPoint(0,1),
-        QPoint(-1,0),
-        QPoint(-1,0),
-        QPoint(0,1)
+        QPoint(1,0)
     };
-    ui->radioButton_tl->setChecked(true);
+    ui->radioButton_00->setChecked(true);
 
 
 
@@ -122,18 +159,18 @@ void DirectCamView::setLeftTop(const QPoint& v_point){
 void DirectCamView::on_pushbutton_a_click(){
 
 
-    qDebug()<<"_l_pushbutton_a[0]:"<<_l_pushbutton_a[0]->rect();
-    qDebug()<<"_l_pushbutton_a[0]:"<<_l_pushbutton_a[0]->geometry();
-    qDebug()<<"_l_pushbutton_a[1]:"<<_l_pushbutton_a[1]->geometry();
+//    qDebug()<<"_l_pushbutton_a[0]:"<<_l_pushbutton_a[0]->rect();
+//    qDebug()<<"_l_pushbutton_a[0]:"<<_l_pushbutton_a[0]->geometry();
+//    qDebug()<<"_l_pushbutton_a[1]:"<<_l_pushbutton_a[1]->geometry();
 
 
-    qDebug()<<"gridLayout:"<<ui->gridLayout->geometry().topLeft();
-    qDebug()<<"groupBox:"<<ui->groupBox->geometry().topLeft();
-    qDebug()<<"gridLayout_5:"<<ui->gridLayout_5->geometry().topLeft();
-    qDebug()<<"gridLayout_7:"<<ui->gridLayout_7->geometry().topLeft();
-    qDebug()<<"cursor().pos():"<<cursor().pos();
-    qDebug()<<"_point_cursor:"<<_point_cursor;
-    qDebug()<<"_point_lefttop:"<<_point_lefttop;
+//    qDebug()<<"gridLayout:"<<ui->gridLayout->geometry().topLeft();
+//    qDebug()<<"groupBox:"<<ui->groupBox->geometry().topLeft();
+//    qDebug()<<"gridLayout_5:"<<ui->gridLayout_5->geometry().topLeft();
+//    qDebug()<<"gridLayout_7:"<<ui->gridLayout_7->geometry().topLeft();
+//    qDebug()<<"cursor().pos():"<<cursor().pos();
+//    qDebug()<<"_point_cursor:"<<_point_cursor;
+//    qDebug()<<"_point_lefttop:"<<_point_lefttop;
 
 
 
@@ -218,7 +255,7 @@ int DirectCamView::getMvPad(QPoint &v_point){
     for(uint i=0;i<_l_pushbutton_move.size();i++){
 
         if(_l_pushbutton_move[i]->geometry().contains(this->mapFromGlobal(cursor().pos()))){
-            v_point=_l_pad_move[i];
+            v_point=_l_pad_move[i]*ui->comboBox->currentText().toInt();
             return 0;
         }
     }

@@ -22,6 +22,7 @@ public:
   ~DevConfig();
   void updateCamArray(const ns_tcs_ds_def::CameraArray &v_array);
   void updateSerialPort(const vector<string> &l_port);
+  void updateDevStatus(const vector<ns_tcs_ds_def::CamStatus>& l_status);
 
 private slots:
   void on_pushButton_adddev_clicked();

@@ -68,7 +68,7 @@ typedef struct AuthPara{
 }AuthPara;
 
 typedef struct Point{
-    Point(){}
+    Point():_x(0),_y(0){}
     Point(int v_x,int v_y):_x(v_x),_y(v_y){}
     neb::CJsonObject jsonobj() const;
     Point( const neb::CJsonObject& v_json);
@@ -78,10 +78,18 @@ typedef struct Point{
 }Point;
 
 typedef struct Pad{
-    Pad(){}
+    Pad():_x(0),_y(0){}
     Pad(int v_x,int v_y):_x(v_x),_y(v_y){}
     neb::CJsonObject jsonobj() const;
+
     Pad( const neb::CJsonObject& v_json);
+    Pad operator +(const Pad& v_cam)//赋值运算符
+    {
+        Pad tmp(0,0);
+        tmp._x=v_cam._x+this->_x;
+        tmp._y=v_cam._y+this->_y;
+        return tmp;
+    }
 
     int _x;
     int _y;
@@ -91,8 +99,9 @@ typedef struct Pad{
 
 typedef struct PointAndPad{
     PointAndPad(const Point&v_point,const Pad&v_pad):_point(v_point),_pad(v_pad){}
+    PointAndPad(){}
     neb::CJsonObject jsonobj() const;
-    PointAndPad( const neb::CJsonObject& v_json);
+    PointAndPad(neb::CJsonObject v_json);
 
     Point _point;
     Pad _pad;
@@ -102,8 +111,29 @@ typedef struct PointAndPad{
 typedef struct DirectCamOp{
     DirectCamOp(const string& v_camname,const PointAndPad v_op):
         _op(v_op),_camname(v_camname){}
+    DirectCamOp(){
+
+    }
     neb::CJsonObject jsonobj() const;
-    DirectCamOp( const neb::CJsonObject& v_json);
+    DirectCamOp(neb::CJsonObject v_json);
+
+    DirectCamOp& operator =(const DirectCamOp& v_cam)//赋值运算符
+    {
+        if (this != &v_cam)
+        {
+            _camname=v_cam._camname;
+            _op=v_cam._op;
+        }
+        return *this;
+    }
+
+    DirectCamOp(const DirectCamOp &v_data){
+        if (this != &v_data)
+        {
+            _camname=v_data._camname;
+            _op=v_data._op;
+        }
+    }
 
     PointAndPad _op;
     string _camname;
@@ -358,6 +388,7 @@ enum ENUM_HTTP_ERRCODE{
 
 ///对请求和相应进行处理的辅助数据结构
 typedef struct CtlInfo{
+    CtlInfo():_req_type(){}
     CtlInfo(ENUM_REQ_TYPE v_type):_req_type(v_type){}
     neb::CJsonObject jsonobj() const;
     CtlInfo( const neb::CJsonObject& v_json);
@@ -435,6 +466,10 @@ typedef struct SingleString{
 
     string _str;
 }SingleString;
+
+
+
+
 
 
 }

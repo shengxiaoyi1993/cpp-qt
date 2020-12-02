@@ -16,6 +16,10 @@ Controler::Controler(string v_config, QObject *parent) : QObject(parent),
     _datacoll(new DataManage::DataColl(v_config)),
     _timer_task(new QTimer)
 {
+    qRegisterMetaType<string>("string");
+    qRegisterMetaType<vector<ns_tcs_ds_def::UserStatus>>("vector<ns_tcs_ds_def::UserStatus>");
+    qRegisterMetaType<ns_tcs_ds_def::CtlInfo>("ns_tcs_ds_def::CtlInfo");
+    qRegisterMetaType<ns_tcs_ds_def::DirectCamOp>("ns_tcs_ds_def::DirectCamOp");
 
     initTimeRecord();
     ///_apiserver初始化
@@ -755,6 +759,7 @@ void Controler::slot_stopService( long long v_fd,string v_usr){
 
 /// 当该设备在该用户的权限内，则可以操作
 void Controler::slot_directCamOp( long long v_fd,string v_usr,ns_tcs_ds_def::DirectCamOp v_data){
+//    cout<<"v_data:"<<v_data.jsonobj().ToFormattedString()<<endl;
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
 
     /// 现在用户信息列表中找到用户类型

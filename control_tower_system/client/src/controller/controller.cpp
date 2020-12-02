@@ -34,7 +34,9 @@ void Controller::slot2DirectCamView_directcamera_op( ns_tcs_ds_def::DirectCamOp 
   cout<<__func__<<": op "<<v_data.jsonobj().ToString()<<endl;
   ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_camarray=_apiclient->req_DIRECTCAM_OP(v_data);
   if(code_camarray != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
-    throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_DIRECTCAM_OP Error!");
+      QMessageBox::information(NULL, "Warning", "Fail to operate !",
+                               QMessageBox::Ok, QMessageBox::Ok);
+//    throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_DIRECTCAM_OP Error!");
   }
 
 }

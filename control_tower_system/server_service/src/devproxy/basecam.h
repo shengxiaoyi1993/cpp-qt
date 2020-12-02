@@ -4,7 +4,12 @@
 #include <QObject>
 #include <string>
 #include <iostream>
+#include <QSerialPort>
+#include <fstream>
 #include "../../../common_component/ds_def/tcs_ds_def.h"
+//#include "../../../common_component/syslogger/syslogger.h"
+
+#include "uartconvert.h"
 
 
 using namespace std;
@@ -32,15 +37,18 @@ class DirectCam:public QObject,public BaseCam
   Q_OBJECT
 public:
   DirectCam(QObject *parent = nullptr):QObject(parent),_isconnected(false){
+
     cout<<__func__<<endl;
 
   }
 
-  DirectCam(const DirectCam& v_vam ,QObject *parent = nullptr):QObject(parent),_isconnected(false){
+  DirectCam(const DirectCam& v_vam ,QObject *parent = nullptr)
+      :QObject(parent),_isconnected(false){
     if(&v_vam != this){
       this->_isconnected=v_vam._isconnected;
       this->_camname=v_vam._camname;
       this->_tty=v_vam._tty;
+
     }
   }
 
@@ -53,27 +61,47 @@ public:
   int setTTY(const string& v_camname,const string& v_cam){
     _camname=v_camname;
     _tty=v_cam;
+
     return 0;
   }
 
-  int op(const ns_tcs_ds_def::PointAndPad &v_data){
-    cout<<_tty<<" op:"<<v_data.jsonobj().ToString()<<endl;
-    return 0;
-  }
+  int op(const ns_tcs_ds_def::PointAndPad &v_pad);
+  int op_pad(const ns_tcs_ds_def::PointAndPad &v_pad);
+
+
 
   bool isConnected(){
-    return _isconnected;
+    return _serial_port.isOpen();
   }
 
   int connect()
   {
     _isconnected=true;
-    return 0;
+    _serial_port.setPortName(QString::fromStdString(_tty));
+    _serial_port.setBaudRate(115200);
+    _serial_port.open(QSerialPort::ReadWrite);
+    _logstreamm.open(_tty+".log");
+    if (_serial_port.isOpen()) {
+        initCam();
+        return 0;
+    }
+
+    return -1;
   }
+
+
   int disConnect(){
-    _isconnected=false;
-    return 0;
+      _serial_port.close();
+      if (!_serial_port.isOpen()) {
+          return 0;
+      }
+
+    return -1;
   }
+
+
+
+
   string camName()const{return _camname;}
 
 
@@ -85,7 +113,15 @@ public slots:
 private:
   string _camname;
   string _tty;
+  QSerialPort _serial_port;
   bool _isconnected;
+  ofstream _logstreamm;
+  unsigned int _array_addr[5][9];
+  ns_tcs_ds_def::Pad _array_pad[5][9];
+  void getRegValue();
+  int initCam();
+
+
 };
 
 

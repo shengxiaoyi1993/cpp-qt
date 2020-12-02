@@ -62,6 +62,10 @@ void DevProxy::setCameraArray(const ns_tcs_ds_def::CameraArray& v_array){
 
        _list_camstatus.push_back(ns_tcs_ds_def::CamStatus(it->_camname,true));
      }
+     else{
+         _list_camstatus.push_back(ns_tcs_ds_def::CamStatus(it->_camname,false));
+     }
+
       connect(tmp,SIGNAL(sgl_disconnect(string)),this,SLOT(slot_onCamDisconnect(string)));
       _list_directcam.push_back(tmp);
     }
@@ -120,11 +124,12 @@ int DevProxy::rmCamDev(const string & v_cam){
 
 
 int DevProxy::opDirectCam(const ns_tcs_ds_def::DirectCamOp &v_data){
+//    cout<<v_data.jsonobj().ToFormattedString()<<endl;
   auto pos_it=find_if(_list_directcam.begin(),_list_directcam.end(),[=](DirectCam* &v_cam){
     return (v_cam->camName()==v_data._camname);
   });
   if(pos_it!=_list_directcam.end()){
-    return (*pos_it)->op(v_data._op);
+    return (*pos_it)->op_pad(v_data._op);
   }
   return -1;
 

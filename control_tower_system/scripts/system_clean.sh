@@ -37,14 +37,14 @@ elif [[ $1 == "win" ]]; then
   rm ../common_lib/third_party_lib/*.zip
 
   make -f thirdlib.mk rmall
-  rm ../server_service/build/server_service/build-server_service-Desktop_Qt_5_9_7_GCC_64bit-Debug/ -rf
+  rm ../server_service/build/build-server_service-* -rf
   rm ../server_service/build/server_service/server_service.pro.user
 
   rm ../server/build/server/server.pro.user
-  rm ../server/build/server/build-server-Desktop_Qt_5_9_7_GCC_64bit-Debug/ -rf
+  rm ../server/build/build-server-* -rf
 
   rm ../client/build/client/client.pro.user
-  rm ../client/build/client/build-client-Desktop_Qt_5_9_7_GCC_64bit-Debug/ -rf
+  rm ../client/build/build-client-* -rf
 else
   echo ">>error:parameters wrong!"
 fi

@@ -37,7 +37,7 @@ win:
 	windeployqt ${RELEASEFILE}${EXEFILE}.exe
 	rm  ${BUILDFILE} -rf
 	cp ${TOP_ROOT}/resources ${RELEASEFILE} -rf
-	tar   ${PROJ_NAME}.zip -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
+	tar -cvf ${PROJ_NAME}.zip   -C ${RELEASEFILE}../  ${RELEASEFILE_NAME}
 	rm  ${RELEASEFILE} -rf
 
 

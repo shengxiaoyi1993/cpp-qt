@@ -4,6 +4,10 @@ APIServer::APIServer(QObject *parent):QObject(parent)
 {
     qRegisterMetaType<string>("string");
     qRegisterMetaType<vector<ns_tcs_ds_def::UserStatus>>("vector<ns_tcs_ds_def::UserStatus>");
+    qRegisterMetaType<ns_tcs_ds_def::CtlInfo>("ns_tcs_ds_def::CtlInfo");
+    qRegisterMetaType<ns_tcs_ds_def::DirectCamOp>("ns_tcs_ds_def::DirectCamOp");
+//    qRegisterMetaType<ns_tcs_ds_def::CtlInfo>("ns_tcs_ds_def::CtlInfo");
+//    qRegisterMetaType<ns_tcs_ds_def::CtlInfo>("ns_tcs_ds_def::CtlInfo");
 
     _com=new ComServer();
     connect(_com,SIGNAL(sgl_OnNewHttpRequest(long long int , char *, char *,void *)),
@@ -110,7 +114,10 @@ void APIServer::slot_OnNewHttpRequest(long long int fd,
     }
     case ns_tcs_ds_def::ENUM_REQ_DIRECTCAM_OP:
     {
-        emit sgl_directCamOp(fd,username,root["data"]);
+        cout<<"recv:"<<root["data"].ToFormattedString();
+        ns_tcs_ds_def::DirectCamOp data_tmp(root["data"]);
+        cout<<"data_tmp:"<<data_tmp.jsonobj().ToFormattedString()<<endl;
+        emit sgl_directCamOp(fd,username,data_tmp);
         break;
     }
     case ns_tcs_ds_def::ENUM_REQ_QRYNVR:

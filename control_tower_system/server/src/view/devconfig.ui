@@ -77,6 +77,11 @@
           <string>相机地址</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>连接状态</string>
+         </property>
+        </column>
         <item>
          <property name="text">
           <string>对地相机</string>

@@ -18,7 +18,6 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 RC_FILE += server.rc
-#RC_ICONS += client.ico
 rc_file += server.gif
 
 # You can also make your code fail to compile if you use deprecated APIs.

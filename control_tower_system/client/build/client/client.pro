@@ -18,7 +18,6 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 RC_FILE += client.rc
-#RC_ICONS += client.ico
 rc_file += client.gif
 
 # You can also make your code fail to compile if you use deprecated APIs.
@@ -74,8 +73,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resources.qrc \
-    ../resources.qrc
+    resources.qrc
+
 
 INCLUDEPATH += $$PWD/../../../common_component/
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/

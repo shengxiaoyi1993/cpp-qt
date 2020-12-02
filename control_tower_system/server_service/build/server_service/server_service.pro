@@ -18,8 +18,10 @@ SOURCES += \
     ../../../common_component/api_server/apiserver.cpp \
     ../../../common_component/comcpp_server/comserver.cpp \
     ../../../common_component/ds_def/tcs_ds_def.cpp \
+    ../../../common_component/syslogger/syslogger.cpp \
     ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.cpp \
     ../../../common_lib/third_party_lib/cjsonobject/cJSON.cpp \
+    ../../src/devproxy/uartconvert.cpp \
         ../../src/main/main.cpp \
     ../../src/datamanage/datamanage.cpp \
     ../../src/devproxy/devproxy.cpp \
@@ -35,17 +37,19 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 RC_FILE += server_service.rc
-#RC_ICONS += client.ico
 rc_file += server_service.gif
 
 HEADERS += \
     ../../../common_component/api_server/apiserver.h \
     ../../../common_component/comcpp_server/comserver.h \
+    ../../../common_component/syslogger/syslogger.h \
     ../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp \
     ../../../common_lib/third_party_lib/cjsonobject/cJSON.h \
     ../../../common_component/ds_def/tcs_ds_def.h \
     ../../src/datamanage/datamanage.h \
     ../../src/devproxy/devproxy.h \
+    ../../src/devproxy/directcam_reg_def.h \
+    ../../src/devproxy/uartconvert.h \
     ../../src/schedule/schedule.h \
     ../../src/devproxy/basecam.h \
     ../../src/controler/controler.h \
@@ -75,6 +79,3 @@ win32: LIBS += -L$$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/li
 
 INCLUDEPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
 DEPENDPATH += $$PWD/../../../common_lib/third_party_lib/restclient-cpp/lib/include
-
-
-
