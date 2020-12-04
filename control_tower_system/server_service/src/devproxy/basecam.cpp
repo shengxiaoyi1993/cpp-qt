@@ -37,15 +37,15 @@ int DirectCam::initCam(){
 
     getRegValue();
 
-    for (uint r=0;r<5 ;r++ ) {
-        for (uint c=0;c<9 ;c++ ) {
-            if (_array_addr[r][c] == 0) {
-                continue;
-            }
-            op(ns_tcs_ds_def::PointAndPad(ns_tcs_ds_def::Point(c,r),
-                                          ns_tcs_ds_def::Pad(0,0)));
-        }
-    }
+//    for (uint r=0;r<5 ;r++ ) {
+//        for (uint c=0;c<9 ;c++ ) {
+//            if (_array_addr[r][c] == 0) {
+//                continue;
+//            }
+//            op(ns_tcs_ds_def::PointAndPad(ns_tcs_ds_def::Point(c,r),
+//                                          ns_tcs_ds_def::Pad(0,0)));
+//        }
+//    }
 
 
 
@@ -69,6 +69,7 @@ void DirectCam::getRegValue(){
                 return ;
 
             }
+//            tmpaddr=0x608;
 
             string s_r=uart_convert::string_readReg(tmpaddr ,crc_tmp);
 
@@ -148,6 +149,7 @@ int DirectCam::op(const ns_tcs_ds_def::PointAndPad &v_data){
         unsigned int v_addr;
         if (uart_convert::addrFromPoint(v_data._point,v_addr) == 0) {
             unsigned char crc_tmp;
+//            v_addr=0x608;
             string s_w=uart_convert::string_writeReg(
                         v_addr,v_data._pad._x,v_data._pad._y,crc_tmp);
             _logstreamm<<"write:";

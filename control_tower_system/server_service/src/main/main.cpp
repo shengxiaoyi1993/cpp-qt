@@ -80,23 +80,23 @@ void test_DirectCamOp(){
 
 void test_directCam(){
     DirectCam cam;
-    cam.setTTY("DIR_CAM","COM11");
+    cam.setTTY("DIR_CAM","COM12");
    if( cam.connect() == 0){
        cout<<"connect succeed !"<<endl;
 //       cam.initCam();
        cout<<"after init"<<endl;
        ns_tcs_ds_def::PointAndPad tmpop(ns_tcs_ds_def::Point(0,4),
                                         ns_tcs_ds_def::Pad(0,0));
-       for (int i=-50;i<50;i++ ) {
-           tmpop._pad._y=0;
-           if(cam.op(tmpop) == 0) {
-               cout<<"op succeed"<<endl;
-           }
-           else{
-               cout<<"op fail"<<endl;
-           }
+//       for (int i=-50;i<50;i++ ) {
+//           tmpop._pad._y=0;
+//           if(cam.op(tmpop) == 0) {
+//               cout<<"op succeed"<<endl;
+//           }
+//           else{
+//               cout<<"op fail"<<endl;
+//           }
 
-       }
+//       }
 
 //       cam.initCam();
 

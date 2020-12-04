@@ -25,6 +25,7 @@ DataColl::DataColl(string v_path):
   _path_save(v_path)
 {
   ifstream input(_path_save);
+
   if(input.is_open()){
     std::string str((std::istreambuf_iterator<char>(input)),
                     std::istreambuf_iterator<char>());
@@ -32,20 +33,29 @@ DataColl::DataColl(string v_path):
     loadJsonobj(root);
   }
   else{
-      createDefaultConfig(_path_save);
+
+      createDefaultConfig(v_path);
+
   }
+
 
 }
 
 int DataColl::createDefaultConfig(const string &v_path){
+
     _users.push_back(User("admin","admin",UserType_admin,{}));
+
     if (v_path == "") {
         _path_save="default.config";
     }
     else {
         _path_save=v_path;
     }
+
     saveToFile();
+
+    return 0;
+
 
 }
 
@@ -193,14 +203,21 @@ int DataColl::setSavePath(const string &v_path){
 }
 
 int DataColl::saveToFile() const{
+    cout<<__func__<<":"<<0<<endl;
+
   neb::CJsonObject obj_root=jsonobj();
+
   ofstream ouput(_path_save);
   if(ouput.is_open()){
     ouput<<obj_root.ToFormattedString();
     ouput.flush();
+    cout<<__func__<<":"<<1<<endl;
+
   }
 
   else{
+      cout<<__func__<<":"<<2<<endl;
+
     throw StringException("Fail to save data!");
   }
   return 0;
