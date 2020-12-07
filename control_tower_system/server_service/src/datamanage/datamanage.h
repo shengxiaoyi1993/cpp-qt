@@ -49,8 +49,9 @@ public:
   /// 对内部数据进行修改的接口
   bool checkRepeatUser(const User& v_user,int v_rol=0);
   int addUser(const User& v_user);
-  /// 当添加设备时，需要给所有用户都加上该设备的权限
+  /// 当添加设备时，需要给所有用户都加上该设备的权限设置
   int addCam(const CamDev& v_dev);
+
   int modifyCam(const CamDev& v_dev);
   int modifyUser(const User& v_user);
   int delUser(const User& v_user);

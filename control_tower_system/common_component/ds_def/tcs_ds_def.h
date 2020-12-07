@@ -224,7 +224,7 @@ typedef struct CameraArray{
 public:
     CameraArray();
     CameraArray(neb::CJsonObject &v_json);
-    /// 检测没有相同_camname的设备，就在响应队列插入
+    /// 检测没有相同_camname的设备，就在相应队列插入
     int addCam(const CamDev& v_dev);
 
     ///

@@ -48,5 +48,3 @@ elif [[ $1 == "win" ]]; then
 else
   echo ">>error:parameters wrong!"
 fi
-
-rm

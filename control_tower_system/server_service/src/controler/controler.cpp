@@ -505,8 +505,11 @@ void Controler::slot_qrySerialPort( long long v_fd,string v_usr){
 
 }
 
-
+/// [过程见文档]
 /// 只有admin/assist才能添加设备
+/// - 查询提交的用户是否有权限
+/// - 然后添加设备
+/// - 在设备代理中初始化一个设备
 void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v_data){
 //    cout<<"slot_addDev:"<<v_data.jsonobj().ToString();
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
@@ -520,10 +523,7 @@ void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
     if(pos_user!=list_user.end()){
         if(pos_user->_type==ns_tcs_ds_def::UserType_admin||pos_user->_type==ns_tcs_ds_def::UserType_assit){
             int flag=_datacoll->addCam(v_data);
-//            cout<<"addcom:"<<v_data.jsonobj().ToString()<<endl;
             if(flag==0){
-//                cout<<"添加成功后，在devproxy实例化一个对象"<<endl;
-
                 /// 添加成功后，在devproxy实例化一个对象
                 _devproxy->setCameraArray(_datacoll->CamArary());
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
@@ -568,7 +568,7 @@ void Controler::slot_addUser( long long v_fd,string v_usr,ns_tcs_ds_def::User v_
 
 }
 
-/// 同上
+/// [过程见文档]
 void Controler::slot_delDev( long long v_fd,string v_usr,string v_cmaname){
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
 
@@ -657,6 +657,8 @@ void Controler::slot_emptyNVR( long long v_fd,string v_usr){
 
 }
 
+
+/// [过程见文档]
 void Controler::slot_setDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v_data){
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
 
@@ -673,7 +675,7 @@ void Controler::slot_setDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
                 /// 添加成功后，在devproxy实例化一个对象
                 _devproxy->setCameraArray(_datacoll->CamArary());
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
-                addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to modify camera "});
+                addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to modify camera :"+v_data._camname});
 
                 return ;
             }
@@ -829,7 +831,7 @@ void Controler::addLoopTask(ENUM_LOOPTASK v_type,vector<string> l_para){
 }
 
 
-
+/// 通知用户某些设备的连接状态发生改变
 /// 查找所有有该设备权限且已经登陆的用户，组织各个用户权限下的设备状态，然后发送
 void Controler::on_DevStatusChange(const string &v_dev){
     std::vector<ns_tcs_ds_def::User> v_users= _datacoll->Users();

@@ -71,6 +71,8 @@ void DevProxy::setCameraArray(const ns_tcs_ds_def::CameraArray& v_array){
     }
   }
 
+  /// 运行至此没有找到
+
 }
 void DevProxy::getSerialPortList(vector<string> &l_port){
     l_port.clear();
