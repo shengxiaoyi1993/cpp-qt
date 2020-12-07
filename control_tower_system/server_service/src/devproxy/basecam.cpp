@@ -37,15 +37,15 @@ int DirectCam::initCam(){
 
     getRegValue();
 
-//    for (uint r=0;r<5 ;r++ ) {
-//        for (uint c=0;c<9 ;c++ ) {
-//            if (_array_addr[r][c] == 0) {
-//                continue;
-//            }
-//            op(ns_tcs_ds_def::PointAndPad(ns_tcs_ds_def::Point(c,r),
-//                                          ns_tcs_ds_def::Pad(0,0)));
-//        }
-//    }
+    //    for (uint r=0;r<5 ;r++ ) {
+    //        for (uint c=0;c<9 ;c++ ) {
+    //            if (_array_addr[r][c] == 0) {
+    //                continue;
+    //            }
+    //            op(ns_tcs_ds_def::PointAndPad(ns_tcs_ds_def::Point(c,r),
+    //                                          ns_tcs_ds_def::Pad(0,0)));
+    //        }
+    //    }
 
 
 
@@ -69,29 +69,39 @@ void DirectCam::getRegValue(){
                 return ;
 
             }
-//            tmpaddr=0x608;
+            //            tmpaddr=0x608;
 
             string s_r=uart_convert::string_readReg(tmpaddr ,crc_tmp);
 
             //            _logstreamm<<"readstr:"<<s_r<<endl;
-//            _logstreamm<<"r:"<<r<<" c:"<<c<<endl;
+            //            _logstreamm<<"r:"<<r<<" c:"<<c<<endl;
 
-//            _logstreamm<<"write:";
-//            for (auto it=s_r.begin();it!=s_r.end() ; it++) {
-//                _logstreamm<<hex<<(uint)*it<<" ";
-//            }
-//            _logstreamm<<endl;
+            cout<<"write:";
+            for (auto it=s_r.begin();it!=s_r.end() ; it++) {
+                cout<<hex<<(uint)*it<<" ";
+            }
+            cout<<endl;
 
             _serial_port.write(s_r.c_str(),s_r.size());
             _serial_port.waitForReadyRead(100);
             QByteArray data_return=_serial_port.readAll();
-            //            _logstreamm<<"return_read:"<<data_return.data()<<endl;
 
-//            _logstreamm<<"return_read:";
-//            for (auto it=data_return.begin();it!=data_return.end() ; it++) {
-//                _logstreamm<<hex<<(uint)*it<<" ";
-//            }
-//            _logstreamm<<endl;
+            _serial_port.waitForReadyRead(100);
+            data_return +=_serial_port.readAll();
+
+            _serial_port.waitForReadyRead(100);
+            data_return +=_serial_port.readAll();
+            _serial_port.waitForReadyRead(100);
+            data_return +=_serial_port.readAll();
+            _serial_port.waitForReadyRead(100);
+            data_return +=_serial_port.readAll();
+
+            cout<<"return_read:";
+            for (auto it=data_return.begin();it!=data_return.end() ; it++) {
+                cout<<hex<<(uint)*it<<" ";
+            }
+            cout<<endl;
+
 
             int tmp_x;
             int tmp_y;
@@ -116,7 +126,7 @@ void DirectCam::getRegValue(){
                 cout<<"****** return_is_wrong"<<endl;
                 return ;
             }
-//            cout<<__func__<<" ----end----"<<endl;
+            //            cout<<__func__<<" ----end----"<<endl;
 
         }
     }
@@ -149,7 +159,7 @@ int DirectCam::op(const ns_tcs_ds_def::PointAndPad &v_data){
         unsigned int v_addr;
         if (uart_convert::addrFromPoint(v_data._point,v_addr) == 0) {
             unsigned char crc_tmp;
-//            v_addr=0x608;
+            //            v_addr=0x608;
             string s_w=uart_convert::string_writeReg(
                         v_addr,v_data._pad._x,v_data._pad._y,crc_tmp);
             _logstreamm<<"write:";
@@ -161,6 +171,7 @@ int DirectCam::op(const ns_tcs_ds_def::PointAndPad &v_data){
             _serial_port.write(s_w.c_str(),s_w.size());
             _serial_port.waitForReadyRead(100);
             QByteArray data_return=_serial_port.readAll();
+
             cout<<"data_return.size():"<<data_return.size()<<endl;
             _logstreamm<<"return:";
 
@@ -180,11 +191,19 @@ int DirectCam::op(const ns_tcs_ds_def::PointAndPad &v_data){
 
                     _serial_port.write(s_r.c_str(),s_r.size());
                     _serial_port.waitForReadyRead(100);
-                    QByteArray data_return=_serial_port.readAll();
+                    QByteArray data_return_read=_serial_port.readAll();
+                    _serial_port.waitForReadyRead(100);
+                    data_return_read +=_serial_port.readAll();
+                    _serial_port.waitForReadyRead(100);
+                    data_return_read +=_serial_port.readAll();
+                    _serial_port.waitForReadyRead(100);
+                    data_return_read +=_serial_port.readAll();
+                    _serial_port.waitForReadyRead(100);
+                    data_return_read +=_serial_port.readAll();
                     int tmp_x;
                     int tmp_y;
                     unsigned char crc_return;
-                    if (uart_convert::ret_readResult(data_return,crc_return,tmp_y,tmp_x) == 0) {
+                    if (uart_convert::ret_readResult(data_return_read,crc_return,tmp_y,tmp_x) == 0) {
                         if (crc_return == crc_tmp) {
                             cout<<hex;
                             cout<<"****** read succeed !"<<endl;

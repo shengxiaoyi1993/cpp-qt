@@ -20,7 +20,7 @@ UserMap fromUserItem(const UserItem& v_item){
 
 
 int ComServer::setAllUserMap(const vector<UserItem>& v_users){
-  cout<<__func__<<v_users.size()<<endl;
+//  cout<<__func__<<v_users.size()<<endl;
   UserMap *maps=new UserMap[v_users.size()];
 
   for (uint i=0;i<v_users.size();i++) {
@@ -122,8 +122,8 @@ int ComServer::stopListenWebsocket(){
 
 int ComServer::cb_CallbackOnNewHttpRequest(long long int fd, char *username, char *req_data,
                                            void *ptr){
-  cout<<endl<<__func__<<endl;
-  cout.flush();
+//  cout<<endl<<__func__<<endl;
+//  cout.flush();
   ComServer* tmpserver=static_cast<ComServer*>(ptr);
   if(  tmpserver->_fds_tm.end() ==
        find_if(tmpserver->_fds_tm.begin(),tmpserver->_fds_tm.end(),
@@ -148,7 +148,7 @@ int ComServer::cb_CallbackOnHttpError(int error_code, void*ptr){
 // username 用户名
 // ptr 在 Setup 时设置好的指针，c++类静态成员函数做为回调函数时可能需要用到
 int ComServer::cb_CallbackOnUserLogin(char *username, void *ptr){
-  cout<<__func__<<":"<<username<<endl;
+//  cout<<__func__<<":"<<username<<endl;
 
   ComServer* tmpserver=static_cast<ComServer*>(ptr);
 
@@ -167,7 +167,7 @@ int ComServer::cb_CallbackOnUserLogin(char *username, void *ptr){
 
 // 当用户退出websocket时的回调
 int ComServer::cb_CallbackOnUserLogout(char *username, void *ptr){
-  cout<<__func__<<":"<<username<<endl;
+//  cout<<__func__<<":"<<username<<endl;
 
 
   ComServer* tmpserver=static_cast<ComServer*>(ptr);

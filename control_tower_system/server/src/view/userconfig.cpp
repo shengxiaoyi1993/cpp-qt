@@ -138,7 +138,6 @@ void UserConfig::on_pushButton_rmall_clicked()
     vector<ns_tcs_ds_def::User>tmplist= _l_users;
     for(int i=0;i<tmplist.size();i++){
         if(tmplist[i]._username != "admin"){
-          cout<<"000000000000000000000:"<<tmplist[i]._username<<endl;
             emit sgl_rmOneUser(tmplist[i]);
         }
     }

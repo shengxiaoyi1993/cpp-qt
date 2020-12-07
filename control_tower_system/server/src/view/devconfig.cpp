@@ -56,7 +56,6 @@ void DevConfig::on_treewidget_itemClicked(QTreeWidgetItem* p_item , int v_index)
 /// search subitem in tablewidget
 ///
 void DevConfig::updateDevStatus(const vector<ns_tcs_ds_def::CamStatus>& l_status){
-    cout<<__func__<<endl;
 
     for(int i=0;i<ui->treeWidget->topLevelItemCount();i++){
 
@@ -65,8 +64,6 @@ void DevConfig::updateDevStatus(const vector<ns_tcs_ds_def::CamStatus>& l_status
 
             for (auto it=l_status.begin();it!=l_status.end() ;it++ ) {
                 if (ui->treeWidget->topLevelItem(i)->child(j)->text(1).toStdString() == it->_camname ) {
-                    cout<<"text(1):"<<ui->treeWidget->topLevelItem(i)->child(j)->text(1).toStdString()<<endl;
-                    cout<<"it->_camname:"<<it->_camname<<endl;
                     if (it->_status) {
                         ui->treeWidget->topLevelItem(i)->child(j)->setText(3,"已连接");
                     }
@@ -149,7 +146,6 @@ void DevConfig::slot2DevItem_testCamConnect(ns_tcs_ds_def::CamDev v_cam){
 /// 清除设备组中的子项
 /// 然后为每一top项添加数据 top项的的标识为0对地 1对空 2直显
 void DevConfig::updateCamArray(const ns_tcs_ds_def::CameraArray &v_array){
-    cout<<__func__<<endl;
     _camarray=v_array;
     /// 清空
     for(int i=0;i<ui->treeWidget->topLevelItemCount();i++){

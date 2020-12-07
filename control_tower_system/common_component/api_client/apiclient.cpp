@@ -69,12 +69,8 @@ int APIClient::sendSecretRequest(const string& v_input,string &output_type,
   int size_ouput;
   char *cstr = new char[v_input.length() + 1];
   strcpy(cstr, v_input.c_str());
-  cout<<"username:"<<_authpara.username<<endl;
-  cout<<"server_ip:"<<_authpara.server_ip<<endl;
-  cout<<"password:"<<_authpara.password<<endl;
 
   int flag=SendSecretRequest(_authpara,cstr,ctype,output,&size_ouput);
-  cout<<"size_ouput:"<<size_ouput<<endl;
 
   output_type=string(ctype);
   buffer_len=size_ouput;
@@ -124,7 +120,6 @@ ns_tcs_ds_def::ENUM_HTTP_ERRCODE APIClient::req_queryALLUSER( vector<ns_tcs_ds_d
                              .ToString(),
                              otype,&ouput,size_output
                              );
-  cout<<"ouput:"<<ouput<<endl;
 
   if(flag!=0){
     return ns_tcs_ds_def::ENUM_HTTP_ERRCODE_DISCONNECT;
@@ -151,7 +146,6 @@ ns_tcs_ds_def::ENUM_HTTP_ERRCODE APIClient::req_queryRUNTME(ns_tcs_ds_def::TimeR
                              .ToString(),
                              otype,&ouput,size_output
                              );
-  cout<<"ouput:"<<ouput<<endl;
 
   if(flag!=0){
     return ns_tcs_ds_def::ENUM_HTTP_ERRCODE_DISCONNECT;
@@ -200,7 +194,6 @@ ns_tcs_ds_def::ENUM_HTTP_ERRCODE APIClient::req_queryDEVARRAY(ns_tcs_ds_def::Cam
                              .ToString(),
                              otype,&ouput,size_output
                              );
-  cout<<"ouput:"<<ouput<<endl;
 
   if(flag!=0){
     return ns_tcs_ds_def::ENUM_HTTP_ERRCODE_DISCONNECT;
@@ -248,7 +241,6 @@ ns_tcs_ds_def::ENUM_HTTP_ERRCODE APIClient::req_queryQRYNVR(ns_tcs_ds_def::NvrDe
                              .ToString(),
                              otype,&ouput,size_output
                              );
-  cout<<"ouput:"<<ouput<<endl;
 
   if(flag!=0){
     return ns_tcs_ds_def::ENUM_HTTP_ERRCODE_DISCONNECT;
@@ -271,7 +263,6 @@ ns_tcs_ds_def::ENUM_HTTP_ERRCODE APIClient::req_querySerialPort(vector<string> &
                                .ToString(),
                                otype,&ouput,size_output
                                );
-    cout<<"ouput:"<<ouput<<endl;
 
     if(flag!=0){
       return ns_tcs_ds_def::ENUM_HTTP_ERRCODE_DISCONNECT;
@@ -502,7 +493,6 @@ APIClient::req_DIRECTCAM_OP(const ns_tcs_ds_def::DirectCamOp v_data){
 
 
 int cb_CallbackOnNewMessage(char* message){
-  cout<<__func__<<message<<endl;
   string str_msg(message);
   neb::CJsonObject root(str_msg);
   ns_tcs_ds_def::CtlInfo ctlinfo_tmp(root);
@@ -528,14 +518,12 @@ int cb_CallbackOnNewMessage(char* message){
       break;
     }
   }
-  cout<<"end to send sgl_WS_PUSHLOG"<<endl;
 
   return 0;
 }
 
 // Websocket 连接被断开时的回调
 int cb_CallbackOnClosed(){
-  cout<<__func__<<endl;
 
   pThis->_status=false;
   emit pThis->sgl_WS_OnClosed();
@@ -544,7 +532,6 @@ int cb_CallbackOnClosed(){
 
 // Websocket 连上，成功接收到服务器的 Hello 时的回调。
 int cb_CallbackOnLogin(){
-  cout<<__func__<<endl;
 
   pThis->_status=true;
   emit pThis->sgl_WS_OnLogin();

@@ -9,7 +9,7 @@
 #include "../devproxy/devproxy.h"
 #include "../../../common_component/ds_def/tcs_ds_def.h"
 #include "../../../common_component/api_server/apiserver.h"
-//#include "../../../common_lib/third_party_lib/cjsonobject/CJsonObject.hpp"
+#include "../../../common_component/logtool/logtool.hpp"
 
 /// 流程：实例化,初始化，开试运行
 
@@ -33,6 +33,9 @@ public:
   /// \brief updateUserMapInAPI 以配置文件的数据将API中用户初始化
   ///
   void updateUserMapInAPI();
+
+
+  void switchLogMode(LogOutputType v_type);
 
 
 
@@ -76,6 +79,8 @@ public slots:
 
   void initTimeRecord();
   void on_checkAndConcludeTask();
+  void on_timer_sendHeartBeat();
+
 
   ns_tcs_ds_def::TimeRecord getCurTimeRecord();
 
@@ -86,6 +91,9 @@ private:
   ns_tcs_ds_def::TimeRecord  _timerecord;
   /// 用于发现任务队列中的任务并执行
   QTimer*   _timer_task;
+  QTimer*   _timer_30s;
+  ostream*  _ostream;
+
 
   /// 将log通过WS发送给所有admin/assit类型的用户
   /// 小心不要在WS处理过程中调用，否则会产生死锁

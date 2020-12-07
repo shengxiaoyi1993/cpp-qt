@@ -14,8 +14,12 @@ Controler::Controler(string v_config, QObject *parent) : QObject(parent),
     _apiserver(new APIServer),
     _devproxy(new DevProxy()),
     _datacoll(new DataManage::DataColl(v_config)),
-    _timer_task(new QTimer)
+    _timer_task(new QTimer),
+    _timer_30s(new QTimer),
+    _ostream(&cout)
+
 {
+    LogTool TmpTool(_ostream,__func__);
     qRegisterMetaType<string>("string");
     qRegisterMetaType<vector<ns_tcs_ds_def::UserStatus>>("vector<ns_tcs_ds_def::UserStatus>");
     qRegisterMetaType<ns_tcs_ds_def::CtlInfo>("ns_tcs_ds_def::CtlInfo");
@@ -81,6 +85,14 @@ Controler::Controler(string v_config, QObject *parent) : QObject(parent),
     _apiserver->setupListenWebsocket();
     _timer_task->start(1000);
 
+    connect(_timer_30s,SIGNAL(timeout())
+            ,this,SLOT(on_timer_sendHeartBeat()));
+
+    _timer_30s->start(30000);
+
+
+
+
     ///_devproxy初始化
     connect(_devproxy,SIGNAL(sgl_camDisconnect(string)),
             this,SLOT(slot_OnDevDisconnect(string)));
@@ -105,6 +117,7 @@ Controler::Controler(string v_config, QObject *parent) : QObject(parent),
 }
 
 Controler::~Controler(){
+
     delete _apiserver;
     delete _devproxy;
     delete _datacoll;
@@ -113,20 +126,45 @@ Controler::~Controler(){
 }
 
 
+void Controler::switchLogMode(LogOutputType v_type){
+    switch (v_type) {
+    case LogOutputType_file:{
+        if(_ostream == &cout){
+            _ostream =new ofstream("server_service_controller.log");
+        }
+        break;
+    }
+    case LogOutputType_cout:{
+        if(_ostream != &cout){
+            if (_ostream != nullptr) {
+                delete _ostream;
+                _ostream=nullptr;
+            }
+            _ostream=&cout;
+        }
+        break;
+    }
+    }
+}
 
 
 void Controler::on_checkAndConcludeTask(){
 
-    stringstream ss;
 
     while(_list_task.size()>0){
         switch (_list_task[0].first) {
         case ENUM_LOOPTASK_WS_PUSHLOG:{
             pushLogToAdvanceUser(_list_task[0].second[1]);
+            (*_ostream)<<getLogInfo("pushLogToAdvanceUser:"+_list_task[0].second[1],
+                    LogResType_succeed
+                    )<<endl;
             break;
         }
         case ENUM_LOOPTASK_WS_RESTART:{
             _apiserver->sendWSMsg_RESTART(_list_task[0].second[0]);
+            (*_ostream)<<getLogInfo("sendWSMsg_RESTART:"+_list_task[0].second[0],
+                    LogResType_succeed
+                    )<<endl;
             break;
         }
         case ENUM_LOOPTASK_WS_USERSTAUS:{
@@ -134,13 +172,18 @@ void Controler::on_checkAndConcludeTask(){
             _apiserver->sendWSMsg_USERSTAUS(_list_task[0].second[0],
                     ns_tcs_ds_def::arrayFromJson<ns_tcs_ds_def::UserStatus>(tmppara)
                     );
-
+            (*_ostream)<<getLogInfo("sendWSMsg_USERSTAUS:"+_list_task[0].second[0],
+                    LogResType_succeed
+                    )<<endl;
             break;
         }
         case ENUM_LOOPTASK_WS_DEVSTATUS:{
             neb::CJsonObject tmppara(_list_task[0].second[1]);
             _apiserver->sendWSMsg_DEVSTATUS(_list_task[0].second[0],
                     ns_tcs_ds_def::arrayFromJson<ns_tcs_ds_def::CamStatus>(tmppara));
+            (*_ostream)<<getLogInfo("sendWSMsg_DEVSTATUS:"+_list_task[0].second[0],
+                    LogResType_succeed
+                    )<<endl;
             break;
         }
         }
@@ -171,22 +214,19 @@ void Controler::initTimeRecord(){
 }
 
 void Controler::updateUserMapInAPI(){
+    LogTool TmpTool(_ostream,__func__);
+
     vector<UserItem> list_useritem;
     auto list_user=_datacoll->Users();
     for(auto it=list_user.begin();it<list_user.end();it++){
         string hash_tmp= QCryptographicHash::hash(QByteArray::fromStdString(it->_password), QCryptographicHash::Sha256)
                 .toHex().toStdString();
         list_useritem.insert(list_useritem.begin(),UserItem(it->_username,hash_tmp));
-//        cout<<"hash_tmp:"<<hash_tmp<<endl;
-//        cout<<"it->_username:"<<it->_username<<endl;
 
     }
-    //  _apiserver->stopListenHttp();
-    //  _apiserver->stopListenWebsocket();
+
     _apiserver->setAllUserMap(list_useritem);
 
-    //  _apiserver->setupListenHttp();
-    //  _apiserver->setupListenWebsocket();
 
 }
 
@@ -202,13 +242,18 @@ ns_tcs_ds_def::TimeRecord Controler::getCurTimeRecord(){
 
 /// 由于返回的错误码未知，因此测试后再进行
 void Controler::slot_OnHttpError(int v_error_code){
-    cout<<__func__<<" v_error_code:"<<v_error_code<<endl;
+//    LogTool TmpTool(_ostream,__func__);
+    (*_ostream)<<getLogInfo(__func__,
+            LogResType_succeed,QString::number(v_error_code).toStdString()
+            )<<endl;
+
 }
 
 /// 登陆后向assit类型的用户通过ws发送状态改变后的用户登陆信息
 /// 先找到已登陆的用户 (仅对assist类型的用户进行发送)
 /// 然后查找各个用户权限下的用户的状态
 void Controler::slot_OnUserLogin(string v_username){
+    (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_username)<<endl;
     (void)v_username;
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"",v_username+" login"});
     on_UserStatusChange();
@@ -216,6 +261,8 @@ void Controler::slot_OnUserLogin(string v_username){
 }
 
 void Controler::slot_OnUserLogout(string v_username){
+    (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_username)<<endl;
+
     (void)v_username;
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"",v_username+" logout"});
 
@@ -226,10 +273,14 @@ void Controler::slot_OnUserLogout(string v_username){
 
 /// 由于返回的错误码未知，因此测试后再进行
 void Controler::slot_OnWebsocketError(int v_error_code){
-    cout<<__func__<<" v_error_code:"<<v_error_code<<endl;
+    (*_ostream)<<getLogInfo(__func__,
+            LogResType_succeed,QString::number(v_error_code).toStdString()
+            )<<endl;
 }
 
 void Controler::slot_OnDevDisconnect(string v_camname){
+    (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_camname)<<endl;
+
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"",v_camname+" Disconnect "});
 
     on_DevStatusChange(v_camname);
@@ -246,41 +297,38 @@ void Controler::slot_OnDevReconnect(string v_camname){
 /// 判断是否在权限内
 /// 获取该用户的信息,向句柄返回数据
 void Controler::slot_qrySingleUser( long long v_fd,string v_usr,string v_data){
+
     /// 该用户或者更高级的用户可以访问该用户
     /// admin,assit 可被admin ,assit 类型的访问,可以访问任意类型的
     /// ordinary    可以访问自身
-//    cout<<__func__<<endl;
 
     std::vector<ns_tcs_ds_def::User> list_user=  _datacoll->Users();
     /// 现在用户信息列表中找到用户类型
     auto pos_user=find_if(list_user.begin(),list_user.end(),[=](ns_tcs_ds_def::User v_useritem){
-//        cout<<"v_useritem._username:"<<v_useritem._username<<endl;
-//        cout<<"v_usr:"<<v_usr<<endl;
 
         return (v_useritem._username==v_usr);
     });
-    cout<<__func__<<" 2"<<endl;
 
     if(pos_user!=list_user.end()){
         if((v_usr == v_data)||(pos_user->_type!=ns_tcs_ds_def::UserType_ordinary)){
-//            cout<<__func__<<" judge0:"<<v_usr << v_data<<endl;
-//            cout<<__func__<<" judge1:"<<(pos_user->_type!=ns_tcs_ds_def::UserType_ordinary)<<endl;
 
 
             auto pos_target=find_if(list_user.begin(),list_user.end(),[=](ns_tcs_ds_def::User v_useritem){
-//                cout<<"v_useritem._username:"<<v_useritem._username<<endl;
-//                cout<<"v_usr:"<<v_usr<<endl;
+
                 return (v_useritem._username==v_data);
             });
             if(pos_target != list_user.end()){
                 _apiserver->sendHTTPMsg_REQ_SINGLEUSER(v_fd,*pos_target);
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_data)<<endl;
+
                 return ;
             }
         }
     }
-//    cout<<__func__<<" 3"<<endl;
 
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail,v_data)<<endl;
+
     return ;
 
 }
@@ -300,16 +348,21 @@ void Controler::slot_qryAllUser( long long v_fd,string v_usr){
             vector<ns_tcs_ds_def::User> tmplist_users;
             tmplist_users.push_back(*pos_user);
             _apiserver->sendHTTPMsg_REQ_ALLUSER(v_fd,tmplist_users);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_usr)<<endl;
+
             return;
         }
         case ns_tcs_ds_def::UserType_admin:
         case ns_tcs_ds_def::UserType_assit:{
             _apiserver->sendHTTPMsg_REQ_ALLUSER(v_fd,list_user);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed,v_usr)<<endl;
             return;
         }
         }
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail,v_usr)<<endl;
+
 }
 
 /// 只要用户在用户信息列表中，就可以返回
@@ -321,9 +374,13 @@ void Controler::slot_qryRunTime( long long v_fd,string v_usr){
     });
     if(pos_user!=list_user.end()){
         _apiserver->sendHTTPMsg_REQ_RUNTME(v_fd,getCurTimeRecord());
+        (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
     }
     else{
         _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+        (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
+
     }
 }
 
@@ -348,6 +405,8 @@ void Controler::slot_qryUserStatus( long long v_fd,string v_usr){
                 }
             }
             _apiserver->sendHTTPMsg_REQ_USERSTAUS(v_fd,v_list);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
             return;
 
 
@@ -358,10 +417,13 @@ void Controler::slot_qryUserStatus( long long v_fd,string v_usr){
                 v_list.push_back(ns_tcs_ds_def::UserStatus(it->first._username,it->second));
             }
             _apiserver->sendHTTPMsg_REQ_USERSTAUS(v_fd,v_list);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
             return;
         }
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail,"no right")<<endl;
 
 }
 
@@ -415,17 +477,23 @@ void Controler::slot_qryDevArray( long long v_fd,string v_usr){
             }
 
             _apiserver->sendHTTPMsg_REQ_DEVARRAY(v_fd,camarray_new);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+            return;
+
 
         }
         else if(pos_user->_type==ns_tcs_ds_def::UserType_admin
                 ||pos_user->_type==ns_tcs_ds_def::UserType_assit){
 
             _apiserver->sendHTTPMsg_REQ_DEVARRAY(v_fd,camarray_tmp);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+            return;
 
         }
     }
 
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail,"no right")<<endl;
 
 
 }
@@ -455,16 +523,21 @@ void Controler::slot_qryDevStatus( long long v_fd,string v_usr){
                 }
             }
             _apiserver->sendHTTPMsg_REQ_DEVSTATUS(v_fd,list_camstatus_new);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
 
             return;
         }
         else if(pos_user->_type==ns_tcs_ds_def::UserType_admin
                 ||pos_user->_type==ns_tcs_ds_def::UserType_assit){
             _apiserver->sendHTTPMsg_REQ_DEVSTATUS(v_fd,list_camstatus);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
             return;
         }
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
+
 }
 
 void Controler::slot_qryNVR( long long v_fd,string v_usr){
@@ -478,9 +551,12 @@ void Controler::slot_qryNVR( long long v_fd,string v_usr){
 
     if(pos_user!=list_user.end()){
         _apiserver->sendHTTPMsg_REQ_QRYNVR(v_fd,_datacoll->NVR());
+        (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
         return;
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -499,9 +575,12 @@ void Controler::slot_qrySerialPort( long long v_fd,string v_usr){
         _devproxy->getSerialPortList(list_port);
 
         _apiserver->sendHTTPMsg_REQ_QRYSERIALPORT(v_fd,list_port);
+        (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
         return;
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -529,6 +608,8 @@ void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 on_DevStatusChange(v_data._camname);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to add camera:"+v_data._camname});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
                 return ;
             }
         }
@@ -536,6 +617,8 @@ void Controler::slot_addDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
 
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to add camera:"+v_data._camname});
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
+
 }
 
 /// 只有admin/assist具有添加用户的权限
@@ -558,6 +641,7 @@ void Controler::slot_addUser( long long v_fd,string v_usr,ns_tcs_ds_def::User v_
 
                 on_UserStatusChange();
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to add user:"+v_data._username});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -565,6 +649,7 @@ void Controler::slot_addUser( long long v_fd,string v_usr,ns_tcs_ds_def::User v_
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to add user:"+v_data._username});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -587,6 +672,7 @@ void Controler::slot_delDev( long long v_fd,string v_usr,string v_cmaname){
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 on_DevStatusChange(v_cmaname);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to del camera:"+v_cmaname});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -594,6 +680,7 @@ void Controler::slot_delDev( long long v_fd,string v_usr,string v_cmaname){
     }
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to del camera:"+v_cmaname});
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -618,6 +705,7 @@ void Controler::slot_delUser( long long v_fd,string v_usr,string v_username){
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 on_UserStatusChange();
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to del user:"+v_username});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -625,6 +713,7 @@ void Controler::slot_delUser( long long v_fd,string v_usr,string v_username){
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to del user:"+v_username});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -645,6 +734,7 @@ void Controler::slot_emptyNVR( long long v_fd,string v_usr){
             if(flag == 0){
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to empty NVR "});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -654,6 +744,7 @@ void Controler::slot_emptyNVR( long long v_fd,string v_usr){
 
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to empty NVR "});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -676,6 +767,7 @@ void Controler::slot_setDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
                 _devproxy->setCameraArray(_datacoll->CamArary());
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to modify camera :"+v_data._camname});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -683,6 +775,7 @@ void Controler::slot_setDev( long long v_fd,string v_usr,ns_tcs_ds_def::CamDev v
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to modify camera "});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -704,6 +797,7 @@ void Controler::slot_setUser( long long v_fd,string v_usr,ns_tcs_ds_def::User v_
                 updateUserMapInAPI();
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to modify user: "+v_data._username});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -711,6 +805,7 @@ void Controler::slot_setUser( long long v_fd,string v_usr,ns_tcs_ds_def::User v_
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to modify user: "+v_data._username});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -729,6 +824,7 @@ void Controler::slot_setNVR( long long v_fd,string v_usr,ns_tcs_ds_def::NvrDev v
             if(flag==0){
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                 addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to modify NVR "});
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
 
                 return ;
             }
@@ -736,6 +832,7 @@ void Controler::slot_setNVR( long long v_fd,string v_usr,ns_tcs_ds_def::NvrDev v
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to modify NVR "});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -751,11 +848,15 @@ void Controler::slot_stopService( long long v_fd,string v_usr){
     if(pos_user!=list_user.end()){
         if(pos_user->_type==ns_tcs_ds_def::UserType_admin||pos_user->_type==ns_tcs_ds_def::UserType_assit){
             _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
+            (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
             //            exit(0);
 
         }
     }
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
+
 }
 
 
@@ -775,6 +876,10 @@ void Controler::slot_directCamOp( long long v_fd,string v_usr,ns_tcs_ds_def::Dir
             int flag =  _devproxy->opDirectCam(v_data);
             if(flag==0){
                 _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
+                addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to operate direct camera： "+v_data._camname});
+
+                (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
                 return;
 
             }
@@ -788,6 +893,8 @@ void Controler::slot_directCamOp( long long v_fd,string v_usr,ns_tcs_ds_def::Dir
                 if(flag==0){
                     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED);
                     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","succeed to operate direct camera： "+v_data._camname});
+                    (*_ostream)<<getLogInfo(__func__,LogResType_succeed)<<endl;
+
                     return;
                 }
             }
@@ -796,6 +903,7 @@ void Controler::slot_directCamOp( long long v_fd,string v_usr,ns_tcs_ds_def::Dir
 
     _apiserver->sendHTTPMsg_RETURNCODE(v_fd,ns_tcs_ds_def::ENUM_HTTP_ERRCODE_OPERATEFAILURE);
     addLoopTask(ENUM_LOOPTASK_WS_PUSHLOG,{"","fail to operate direct camera： "+v_data._camname});
+    (*_ostream)<<getLogInfo(__func__,LogResType_fail)<<endl;
 
 }
 
@@ -876,5 +984,10 @@ void Controler::on_DevStatusChange(const string &v_dev){
     }
 
 }
+
+void Controler::on_timer_sendHeartBeat(){
+    _apiserver->sendWebsocketHeartBeat();
+}
+
 
 

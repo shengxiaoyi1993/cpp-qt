@@ -494,17 +494,11 @@ TimeRecord::TimeRecord( const neb::CJsonObject& v_json){
     v_json.Get("_time_start",tmp_time_start);
     v_json.Get("_time_cur",tmp_time_cur);
     v_json.Get("_time_interval",tmp_time_interval);
-    cout<<"tmp_time_start:"<<tmp_time_start<<endl;
-    cout<<"tmp_time_cur:"<<tmp_time_cur<<endl;
-    cout<<"tmp_time_interval:"<<tmp_time_interval<<endl;
+
 
     _time_start=static_cast<long>(tmp_time_start);
     _time_cur=static_cast<long>(tmp_time_cur);
     _time_interval=static_cast<long>(tmp_time_interval);
-    cout<<"_time_start:"<<_time_start<<endl;
-    cout<<"_time_cur:"<<_time_cur<<endl;
-    cout<<"_time_interval:"<<_time_interval<<endl;
-
 
 }
 

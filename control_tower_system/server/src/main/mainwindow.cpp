@@ -61,7 +61,6 @@ void MainWindow::uopdateServerStaus(const string &v_serverip,
                                     int v_lasttime,
                                     int v_user){
 
-  cout<<__func__<<"v_lasttime:"<<v_lasttime<<endl;
 
   /// IP设置
   if(v_serverip != ""){

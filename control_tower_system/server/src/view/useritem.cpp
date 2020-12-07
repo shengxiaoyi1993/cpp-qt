@@ -80,13 +80,11 @@ void UserItem::on_pushButton_apply_click(){
 }
 
 void UserItem::on_pushButton_cancel_click(){
-  cout<<__func__<<endl;
   this->hide();
 }
 
 
 void UserItem::on_pushButton_confirm_click(){
-  cout<<__func__<<endl;
   ns_tcs_ds_def::User v_user=getUserInfo();
 
   if (_is_addmode) {
@@ -107,7 +105,6 @@ void UserItem::on_pushButton_del_click(){
   this->hide();
 
 
-  cout<<__func__<<endl;
 
 }
 
@@ -279,7 +276,6 @@ void UserItem::on_treeWidget_itemClicked(QTreeWidgetItem *v_item, int column)
     }
   }
   if(is_topitem == true){
-    cout<<"is_topitem == true"<<endl;
     ///对于每个子项都设置为top项的状态
     for(int i=0;i<v_item->childCount();i++){
       v_item->child(i)->setCheckState(1,checkstate_read_tmp);
@@ -304,8 +300,8 @@ void UserItem::on_treeWidget_itemClicked(QTreeWidgetItem *v_item, int column)
     item_parent->setCheckState(1,all_child_read_check);
     item_parent->setCheckState(2,all_child_crtl_check);
 
-    cout<<"is_topitem == false"<<endl;
   }
+
 }
 
 

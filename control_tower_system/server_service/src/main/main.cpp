@@ -23,18 +23,18 @@ int main(int argc, char *argv[])
 
 
     QCoreApplication a(argc, argv);
-//    test_uartconvert();
-//test_DirectCamOp();
-//    test_directCam();
+    //    test_uartconvert();
+    //    test_DirectCamOp();
+    //    test_directCam();
 
-          Controler *ctlr;
-          try {
-            ctlr=new Controler("default.config");
+    Controler *ctlr;
+    try {
+        ctlr=new Controler("default.config");
+        ctlr->switchLogMode(LogOutputType_file);
 
-          } catch (std::exception v_ex) {
-            cout<<"exception:"<<v_ex.what()<<endl;
-          }
-
+    } catch (std::exception v_ex) {
+        cout<<"exception:"<<v_ex.what()<<endl;
+    }
 
     return a.exec();
 }
@@ -63,9 +63,9 @@ void test_uartconvert(){
 
 void test_DirectCamOp(){
     ns_tcs_ds_def::DirectCamOp op("cam",
-                               ns_tcs_ds_def::PointAndPad(
-                ns_tcs_ds_def::Point(1,0),
-                                  ns_tcs_ds_def::Pad(3,4))
+                                  ns_tcs_ds_def::PointAndPad(
+                                      ns_tcs_ds_def::Point(1,0),
+                                      ns_tcs_ds_def::Pad(3,4))
                                   );
     cout<<op.jsonobj().ToFormattedString()<<endl;
     neb::CJsonObject root=op.jsonobj();
@@ -80,31 +80,31 @@ void test_DirectCamOp(){
 
 void test_directCam(){
     DirectCam cam;
-    cam.setTTY("DIR_CAM","COM12");
-   if( cam.connect() == 0){
-       cout<<"connect succeed !"<<endl;
-//       cam.initCam();
-       cout<<"after init"<<endl;
-       ns_tcs_ds_def::PointAndPad tmpop(ns_tcs_ds_def::Point(0,4),
-                                        ns_tcs_ds_def::Pad(0,0));
-//       for (int i=-50;i<50;i++ ) {
-//           tmpop._pad._y=0;
-//           if(cam.op(tmpop) == 0) {
-//               cout<<"op succeed"<<endl;
-//           }
-//           else{
-//               cout<<"op fail"<<endl;
-//           }
+    cam.setTTY("DIR_CAM","COM8");
+    if( cam.connect() == 0){
+        cout<<"connect succeed !"<<endl;
+        //       cam.initCam();
+        cout<<"after init"<<endl;
+        ns_tcs_ds_def::PointAndPad tmpop(ns_tcs_ds_def::Point(0,4),
+                                         ns_tcs_ds_def::Pad(0,0));
+        //       for (int i=-50;i<50;i++ ) {
+        //           tmpop._pad._y=0;
+        //           if(cam.op(tmpop) == 0) {
+        //               cout<<"op succeed"<<endl;
+        //           }
+        //           else{
+        //               cout<<"op fail"<<endl;
+        //           }
 
-//       }
+        //       }
 
-//       cam.initCam();
+        //       cam.initCam();
 
 
-   }
-   else{
-       cout<<"connect failed !"<<endl;
-   }
+    }
+    else{
+        cout<<"connect failed !"<<endl;
+    }
 
 
 }

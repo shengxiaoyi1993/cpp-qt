@@ -41,7 +41,7 @@ public:
 
   int sendHttpResponse(long long int fd, char *data_type, unsigned char *data,
                        int data_length){
-    cout<<"send response:"<<data<<endl;
+//    cout<<"send response:"<<data<<endl;
     return _com->sendHttpResponse(fd,data_type,data,data_length); }
 
   int closeHttpConnection(long long int fd){return _com->closeHttpConnection(fd); }
@@ -60,12 +60,12 @@ public:
 
   int sendWebsocketMessage(const string& user, const string &data)
   {
-    cout<<endl<<"****************************************"<<endl;
-    cout<<"sendWebsocketMessage:"<<data<<endl;
-    cout<<endl<<"****************************************"<<endl;
+//    cout<<endl<<"****************************************"<<endl;
+//    cout<<"sendWebsocketMessage:"<<data<<endl;
+//    cout<<endl<<"****************************************"<<endl;
 
      int flag=_com->sendWebsocketMessage(const_cast<char*>(user.c_str()),const_cast<char*>(data.c_str()));
-     cout<<__func__<<"end !"<<endl;
+//     cout<<__func__<<"end !"<<endl;
      return flag;
   }
 

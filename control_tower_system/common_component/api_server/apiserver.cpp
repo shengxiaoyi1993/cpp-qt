@@ -35,14 +35,14 @@ void APIServer::slot_OnNewHttpRequest(long long int fd,
                                       char *req_data,
                                       void *ptr){
     (void)ptr;
-    cout<<endl<<__func__<<req_data<<endl;
-    cout.flush();
+//    cout<<endl<<__func__<<req_data<<endl;
+//    cout.flush();
     fflush(stdout);
     neb::CJsonObject root(req_data);
     if(root.IsEmpty()){
         throw text_exception(__func__);
     }
-    cout<<"_req_type:"<<ns_tcs_ds_def::dataStructFromJsonObj<ns_tcs_ds_def::CtlInfo>(root)._req_type<<endl;
+//    cout<<"_req_type:"<<ns_tcs_ds_def::dataStructFromJsonObj<ns_tcs_ds_def::CtlInfo>(root)._req_type<<endl;
 
     switch (ns_tcs_ds_def::dataStructFromJsonObj<ns_tcs_ds_def::CtlInfo>(root)._req_type) {
     case ns_tcs_ds_def::ENUM_REQ_SINGLEUSER:
@@ -77,7 +77,7 @@ void APIServer::slot_OnNewHttpRequest(long long int fd,
     }
     case ns_tcs_ds_def::ENUM_REQ_ADDDEV:
     {
-        cout<<" sgl_addDev"<<endl;
+//        cout<<" sgl_addDev"<<endl;
         emit sgl_addDev(fd,username,root["data"]);
         break;
     }
@@ -114,9 +114,9 @@ void APIServer::slot_OnNewHttpRequest(long long int fd,
     }
     case ns_tcs_ds_def::ENUM_REQ_DIRECTCAM_OP:
     {
-        cout<<"recv:"<<root["data"].ToFormattedString();
+//        cout<<"recv:"<<root["data"].ToFormattedString();
         ns_tcs_ds_def::DirectCamOp data_tmp(root["data"]);
-        cout<<"data_tmp:"<<data_tmp.jsonobj().ToFormattedString()<<endl;
+//        cout<<"data_tmp:"<<data_tmp.jsonobj().ToFormattedString()<<endl;
         emit sgl_directCamOp(fd,username,data_tmp);
         break;
     }
@@ -156,7 +156,7 @@ void APIServer::slot_OnHttpError(int error_code, void*ptr){
 
 void APIServer::slot_OnUserLogin(char *username, void *ptr){
     (void)ptr;
-    cout<<__func__<<endl;
+//    cout<<__func__<<endl;
     emit sgl_OnUserLogin(username);
 }
 
@@ -201,8 +201,8 @@ int APIServer::sendWSMsg_DEVSTATUS(const string& v_user,const vector<ns_tcs_ds_d
 
 
 int APIServer::sendHTTPMsg_REQ_SINGLEUSER(long long int v_fd,const ns_tcs_ds_def::User& v_user ){
-    cout<<"v_user:"<<v_user.jsonobj().ToString()<<endl;
-    cout.flush();
+//    cout<<"v_user:"<<v_user.jsonobj().ToString()<<endl;
+//    cout.flush();
     string str_res=ns_tcs_ds_def::ReturnInfo(ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED)
             .jsonobjWithData(v_user.jsonobj()).ToString() ;
     int flag_send= sendHttpResponse(v_fd,"text",reinterpret_cast<unsigned char*>(const_cast<char*>(str_res.c_str())),

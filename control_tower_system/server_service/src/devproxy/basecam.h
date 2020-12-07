@@ -82,8 +82,13 @@ public:
     _serial_port.open(QSerialPort::ReadWrite);
     _logstreamm.open(_tty+".log");
     if (_serial_port.isOpen()) {
+        cout<<"_serial_port is  open"<<endl;
+
         initCam();
         return 0;
+    }
+    else{
+        cout<<"_serial_port is not open"<<endl;
     }
 
     return -1;

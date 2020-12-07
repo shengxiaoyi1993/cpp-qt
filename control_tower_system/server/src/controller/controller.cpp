@@ -72,7 +72,6 @@ void controller::updateMainwindow(){
     ///req_queryRUNTME
     ns_tcs_ds_def::TimeRecord  v_info;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_runtime=_apiclient->req_queryRUNTME(v_info);
-    cout<<"req_queryRUNTME:"<<code_runtime<<endl;
     if(code_runtime != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryRUNTME Error!");
     }
@@ -81,7 +80,6 @@ void controller::updateMainwindow(){
     ///req_queryUSERSTAUS
     ns_tcs_ds_def::CameraArray v_array;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_devarray=_apiclient->req_queryDEVARRAY(v_array);
-    cout<<"req_queryUSERSTAUS:"<<code_devarray<<endl;
     if(code_devarray != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryDEVARRAY Error!");
 
@@ -89,7 +87,6 @@ void controller::updateMainwindow(){
 
     vector<ns_tcs_ds_def::User> v_users;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_alluser=_apiclient->req_queryALLUSER(v_users);
-    cout<<"req_queryALLUSER:"<<code_alluser<<endl;
     if(code_devarray != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
     }
@@ -98,7 +95,6 @@ void controller::updateMainwindow(){
     ///req_queryUSERSTAUS
     vector<ns_tcs_ds_def::UserStatus> v_list_userstatus;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_userstatus=_apiclient->req_queryUSERSTAUS(v_list_userstatus);
-    cout<<"req_queryUSERSTAUS:"<<code_userstatus<<endl;
     if(code_userstatus != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryUSERSTAUS Error!");
     }
@@ -309,11 +305,7 @@ void controller::slot2MainWindow_stopService(){
 void controller::slot2LoginServer_reqToLogin(string v_serverip,
                                              string v_username,
                                              string v_password){
-    cout<<__func__
-       <<" v_serverip: "<<v_serverip
-      <<" v_username: "<<v_username
-     <<" v_password: "<<v_password
-    <<endl;
+
     _serverip=v_serverip;
     _username=v_username;
     _password=v_password;
@@ -332,20 +324,17 @@ void controller::slot2LoginServer_reqToLogin(string v_serverip,
 
 
 void controller::slot2LoginServer_reqToQuit(){
-    cout<<__func__<<endl;
 
     exit(0);
 }
 
 void controller::slot2APIClient_WS_OnLogin(){
-    cout<<__func__<<endl;
     _diag_login->hide();
     synAfterConnect();
     _mainwindow->show();
 }
 
 void controller::slot2APIClient_WS_OnClosed(){
-    cout<<__func__<<endl;
     QMessageBox:: StandardButton result=  QMessageBox::information(NULL, "Warning", "Logout ! WebSocket is close.",
                                                                    QMessageBox::Ok , QMessageBox::Ok);
     exit(REBOOT_CODE);
@@ -357,20 +346,17 @@ void controller::slot2APIClient_WS_RESTART(){
 
 
 void controller::slot2APIClient_WS_PUSHLOG(string log){
-    cout<<__func__<<": log:"<<log<<endl;
     _mainwindow->pushbackLog(log);
     synAfterConnect();
 
 }
 
 void controller::slot2APIClient_WS_USERSTAUS(vector<ns_tcs_ds_def::UserStatus> v_list ){
-    cout<<__func__<<endl;
 
     updateMainwindow();
 }
 
 void controller::slot2APIClient_WS_DEVSTATUS(vector<ns_tcs_ds_def::CamStatus> v_list){
-    cout<<__func__<<endl;
     updateMainwindow();
 }
 
@@ -379,7 +365,6 @@ void controller::slot_on_timer_1s(){
     ///req_queryRUNTME
     ns_tcs_ds_def::TimeRecord  v_info;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_runtime=_apiclient->req_queryRUNTME(v_info);
-    cout<<"req_queryRUNTME:"<<code_runtime<<endl;
     if(code_runtime != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryRUNTME Error!");
     }
@@ -387,7 +372,6 @@ void controller::slot_on_timer_1s(){
     ///req_queryUSERSTAUS
     vector<ns_tcs_ds_def::UserStatus> v_list_userstatus;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_userstatus=_apiclient->req_queryUSERSTAUS(v_list_userstatus);
-    cout<<"req_queryUSERSTAUS:"<<code_userstatus<<endl;
     if(code_userstatus != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryUSERSTAUS Error!");
     }
@@ -406,7 +390,6 @@ void controller::slot_on_timer_1s(){
 void controller::updateUserConfig(){
     vector<ns_tcs_ds_def::User> v_users;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_alluser=_apiclient->req_queryALLUSER(v_users);
-    //  cout<<"req_queryALLUSER:"<<code_alluser<<endl;
     if(code_alluser != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
     }
@@ -415,7 +398,6 @@ void controller::updateUserConfig(){
 
 
 void controller::slot2UserConfig_rmOneUser(ns_tcs_ds_def::User v_user){
-    //  cout<<__func__<<"v_user._username:"<<v_user._username<<endl;
 
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE flag= _apiclient->req_DELUSER(v_user._username);
     if(flag == ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
@@ -482,7 +464,6 @@ void controller::slot2DevConfig_addCam(ns_tcs_ds_def::CamDev v_cam){
 void controller::updataDevConfig(){
     ns_tcs_ds_def::CameraArray v_camarray;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_camarray=_apiclient->req_queryDEVARRAY(v_camarray);
-    cout<<"req_queryALLUSER:"<<code_camarray<<endl;
     if(code_camarray != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
     }
@@ -490,7 +471,6 @@ void controller::updataDevConfig(){
 
     vector<string> list_port;
     ns_tcs_ds_def::ENUM_HTTP_ERRCODE code_port=_apiclient->req_querySerialPort(list_port);
-    //  cout<<"req_querySerialPort:"<<code_port<<endl;
     if(code_port != ns_tcs_ds_def::ENUM_HTTP_ERRCODE_SUCCEED){
         throw StringException(string(__FILE__)+":"+to_string(__LINE__)+":"+string(__FUNCTION__)+":req_queryALLUSER Error!");
     }
