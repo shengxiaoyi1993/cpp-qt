@@ -38,3 +38,15 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+
+unix|win32: LIBS += -L$$PWD/../../third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
+
+INCLUDEPATH += $$PWD/../../third_party_lib/restclient-cpp/lib/include
+DEPENDPATH += $$PWD/../../third_party_lib/restclient-cpp/lib/include
+
+unix|win32: LIBS += -L$$PWD/../../sskj_lib/com_server/lib/so/ -lcom_server
+
+INCLUDEPATH += $$PWD/../../sskj_lib/com_server/include
+DEPENDPATH += $$PWD/../../sskj_lib/com_server/include

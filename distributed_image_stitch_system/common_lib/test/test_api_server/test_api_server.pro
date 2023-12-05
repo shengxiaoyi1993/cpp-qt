@@ -15,9 +15,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    ../../sskj_lib/ds_df_diss/ds_df_diss.cpp \
+    ../../sskj_lib/api_diss/dissapi.cpp
+
+HEADERS += \
+    ../../sskj_lib/ds_df_diss/ds_df_diss.h \
+    ../../sskj_lib/api_diss/dissapi.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix|win32: LIBS += -L$$PWD/../../third_party_lib/restclient-cpp/lib/lib/ -lrestclient-cpp
+
+INCLUDEPATH += $$PWD/../../third_party_lib/restclient-cpp/lib/include
+DEPENDPATH += $$PWD/../../third_party_lib/restclient-cpp/lib/include
+
+unix|win32: LIBS += -L$$PWD/../../sskj_lib/com_server/lib/so/ -lcom_server
+
+INCLUDEPATH += $$PWD/../../sskj_lib/com_server/include
+DEPENDPATH += $$PWD/../../sskj_lib/com_server/include
+

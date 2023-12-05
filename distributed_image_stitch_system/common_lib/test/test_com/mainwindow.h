@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "../../sskj_lib/com_server/include/com_server_export.h"
 
 class MainWindow : public QMainWindow
 {

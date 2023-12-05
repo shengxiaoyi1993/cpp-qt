@@ -14,6 +14,14 @@ class InitView : public QDialog
 public:
   explicit InitView(QWidget *parent = nullptr);
   ~InitView();
+signals:
+  void sgl_on_initConfig(QString v_ip,int v_count);
+
+
+private slots:
+  void on_pushButton_ok_clicked();
+
+  void on_pushButton_cancel_clicked();
 
 private:
   Ui::InitView *ui;

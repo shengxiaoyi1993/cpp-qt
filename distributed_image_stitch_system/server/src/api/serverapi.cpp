@@ -1,6 +1,22 @@
 #include "serverapi.h"
 
-ServerApi::ServerApi(QObject *parent) : QObject(parent)
-{
+namespace ServerApi {
+
+
+
+
+int getClientStatus(string v_client,ds_df_diss::ClientStatus_JE& v_state){
+
+
+}
+
+
+
+
+
+
+
+
+
 
 }

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -11,4 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
   delete ui;
+}
+
+
+void MainWindow::slt_showWarning(QString v_warn){
+  QMessageBox::information(this, tr("Warning"),
+                           v_warn);
+
+
 }

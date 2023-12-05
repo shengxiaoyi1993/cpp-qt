@@ -1,6 +1,19 @@
 #include "clientapi.h"
 
-ClientApi::ClientApi(QObject *parent) : QObject(parent)
-{
 
+
+namespace ClientApi {
+
+int initHttpEnv(){
+ return InitHTTPEnv();
 }
+
+
+int uintHTTPEnv(){
+  return DisableHTTPEnv();
+}
+
+
+
+
+};
